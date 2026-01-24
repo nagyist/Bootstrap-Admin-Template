@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Modern Bootstrap 5 Admin Dashboard Template (v3.2.0) using Vite, Alpine.js, and SCSS.
+Modern Bootstrap 5 Admin Dashboard Template (v3.2.1) using Vite, Alpine.js, and SCSS.
 
 | Directory | Purpose |
 |-----------|---------|
@@ -62,10 +62,10 @@ Alpine.data('componentName', () => ({
 ## Dependencies
 
 - **UI**: Bootstrap 5.3.8, Bootstrap Icons 1.13.1
-- **Reactive**: Alpine.js 3.15.2
+- **Reactive**: Alpine.js 3.15.4
 - **Charts**: ApexCharts 5.3.6, Chart.js 4.5.1
-- **Notifications**: SweetAlert2 11.26.3
-- **Build**: Vite 7.2.4, Sass 1.94.2
+- **Notifications**: SweetAlert2 11.26.17
+- **Build**: Vite 7.3.1, Sass 1.97.3
 
 ## Documentation
 

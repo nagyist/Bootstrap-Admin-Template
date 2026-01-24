@@ -2,7 +2,7 @@
 
 > A completely modernized, powerful, and free Bootstrap 5 admin dashboard template built with cutting-edge web technologies.
 
-**🎉 Version 3.2.0 Release** - All dependencies updated to latest versions, ESLint v9 configuration, and security improvements.
+**🎉 Version 3.2.1 Release** - All dependencies updated to latest versions, improved ESLint configuration with `globals` package.
 
 ![Metis Bootstrap Admin Dashboard](./metis-bootstrap-admin-dashboard.png)
 
@@ -22,10 +22,10 @@
 - **Modern Typography** - Inter font family for enhanced readability
 
 ### 🚀 **Advanced Technology Stack**
-- **Alpine.js 3.15.2** - Lightweight reactive framework for modern interactions
+- **Alpine.js 3.15.4** - Lightweight reactive framework for modern interactions
 - **ES6+ JavaScript** - Modern JavaScript with modules and async/await
-- **Vite 7.2.4** - Lightning-fast development and optimized production builds
-- **SCSS Architecture** - Organized, scalable stylesheet structure with Sass 1.94.2
+- **Vite 7.3.1** - Lightning-fast development and optimized production builds
+- **SCSS Architecture** - Organized, scalable stylesheet structure with Sass 1.97.3
 - **Bootstrap Icons 1.13.1** - 1,800+ high-quality SVG icons
 - **ApexCharts 5.3.6** - Advanced charting library
 - **Font Awesome 7.1.0** - Additional icon library
@@ -159,17 +159,17 @@ document.addEventListener('alpine:init', () => {
 });
 ```
 
-## 🆕 What's New in v3.2.0
+## 🆕 What's New in v3.2.1
 
-### Latest Updates (November 2025)
+### Latest Updates (January 2026)
 
 - ✅ **All Dependencies Updated** - Every package upgraded to latest stable version
-- ✅ **ESLint v9 Configuration** - New flat config format for modern linting
-- ✅ **Font Awesome 7.1.0** - Latest icon library with new icons
-- ✅ **Vite 7.2.4** - Improved build performance
-- ✅ **SweetAlert2 11.26.3** - Enhanced notification features
+- ✅ **Improved ESLint Config** - Now uses `globals` package for cleaner browser globals
+- ✅ **Vite 7.3.1** - Latest build tool with performance improvements
+- ✅ **Sass 1.97.3** - Latest SCSS compiler with bug fixes
+- ✅ **SweetAlert2 11.26.17** - Enhanced notification features
+- ✅ **Alpine.js 3.15.4** - Bug fixes and performance improvements
 - ✅ **0 Security Vulnerabilities** - All packages audited and secure
-- ✅ **Bug Fixes** - Fixed duplicate method error in security component
 
 ## 🌟 Key Improvements in v3.0
 

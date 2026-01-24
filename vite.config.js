@@ -78,7 +78,7 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         api: 'modern-compiler',
-        silenceDeprecations: ['legacy-js-api', 'import', 'global-builtin', 'color-functions'],
+        silenceDeprecations: ['legacy-js-api', 'import', 'global-builtin', 'color-functions', 'if-function'],
       },
     },
   },
@@ -93,5 +93,6 @@ export default defineConfig({
   // Optimize dependencies
   optimizeDeps: {
     include: ['bootstrap', 'alpinejs', 'chart.js', 'apexcharts', 'sweetalert2', 'dayjs'],
+    exclude: ['lucide'], // Optional dependency, loaded dynamically
   },
 });
