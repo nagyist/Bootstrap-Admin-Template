@@ -5,6 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.0] - 2026-01-26
+
+### Responsive Layout Overhaul - Mobile & Sidebar Rework
+
+Complete rework of the mobile experience and sidebar toggle system for a polished, production-ready responsive layout.
+
+### Fixed
+
+- **Mobile layout completely broken** - Sidebar, header, footer, and cards all had layout issues below the `lg` breakpoint
+- **Sidebar never toggled on desktop** - `SidebarManager` module existed but was never imported or initialized in `main.js`
+- **Duplicate sidebar toggle handlers** - Inline `<script>` blocks in all 21 HTML pages conflicted with `SidebarManager`, causing desktop toggle clicks to cancel out (both handlers fired, toggling the class on then off)
+- **Dropdowns pushed layout on mobile** - Bootstrap's `navbar-expand-lg` sets `.dropdown-menu` to `position: static` below the `lg` breakpoint; forced to `position: absolute` for proper overlay behavior
+- **Inconsistent mobile breakpoints** - Some components used 768px, others 991.98px; standardized to 991.98px (`lg`) throughout
+- **Hamburger menu hidden behind logo** - Repositioned hamburger into the header navbar flow and pinned it at the sidebar edge on desktop
+
+### Changed
+
+- **Sidebar toggle architecture** - Single source of truth via `SidebarManager` module; removed all 21 inline sidebar toggle `<script>` blocks from HTML pages
+- **Hamburger menu placement** - Moved from floating `position: fixed` element to header navbar; absolutely positioned at sidebar edge on desktop, normal flow on mobile
+- **Mobile sidebar behavior** - Now uses off-screen `transform: translateX(-100%)` with overlay backdrop instead of broken margin/width toggling
+- **Desktop sidebar collapse** - Clean mini-sidebar (70px) with hidden labels, badges, and submenus; content area adjusts via `margin-left` transition
+- **Footer responsive** - Resets `margin-left` to 0 below `lg` breakpoint
+
+### Added
+
+- **`SidebarManager` initialization** - Imported and instantiated in `main.js` (was previously dead code)
+- **Sidebar backdrop** - Added `.sidebar-backdrop` overlay element to all 21 HTML pages for mobile sidebar
+- **Mobile sidebar features** - Escape key closes sidebar, backdrop click closes, body scroll lock when open, resize handler cleans up state when crossing breakpoints
+- **Responsive card styles** - Smaller padding and icon sizes on mobile for stats cards
+- **Compact header buttons** - Reduced button padding on small screens
+- **Header dropdown fix** - `.navbar-nav .dropdown-menu { position: absolute }` override in `_header.scss`
+
+---
+
 ## [3.2.1] - 2026-01-24
 
 ### 🔧 Maintenance Release - Dependency Updates & Config Improvements

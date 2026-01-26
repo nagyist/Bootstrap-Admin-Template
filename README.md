@@ -2,7 +2,7 @@
 
 > A completely modernized, powerful, and free Bootstrap 5 admin dashboard template built with cutting-edge web technologies.
 
-**🎉 Version 3.2.1 Release** - All dependencies updated to latest versions, improved ESLint configuration with `globals` package.
+**🎉 Version 3.3.0 Release** - Complete mobile layout rework, sidebar toggle overhaul, and responsive improvements across all pages.
 
 ![Metis Bootstrap Admin Dashboard](./metis-bootstrap-admin-dashboard.png)
 
@@ -159,17 +159,18 @@ document.addEventListener('alpine:init', () => {
 });
 ```
 
-## 🆕 What's New in v3.2.1
+## 🆕 What's New in v3.3.0
 
-### Latest Updates (January 2026)
+### Responsive Layout Overhaul (January 2026)
 
-- ✅ **All Dependencies Updated** - Every package upgraded to latest stable version
-- ✅ **Improved ESLint Config** - Now uses `globals` package for cleaner browser globals
-- ✅ **Vite 7.3.1** - Latest build tool with performance improvements
-- ✅ **Sass 1.97.3** - Latest SCSS compiler with bug fixes
-- ✅ **SweetAlert2 11.26.17** - Enhanced notification features
-- ✅ **Alpine.js 3.15.4** - Bug fixes and performance improvements
-- ✅ **0 Security Vulnerabilities** - All packages audited and secure
+- ✅ **Complete Mobile Rework** - Sidebar, header, footer, and cards fully responsive across all breakpoints
+- ✅ **Sidebar Toggle Overhaul** - Single `SidebarManager` module replaces 21 duplicate inline scripts
+- ✅ **Mobile Sidebar Overlay** - Off-screen slide-in with backdrop, escape key, and scroll lock
+- ✅ **Desktop Mini Sidebar** - Clean 70px collapsed state with icon-only navigation
+- ✅ **Hamburger in Header** - Toggle button lives in navbar flow, pinned at sidebar edge on desktop
+- ✅ **Fixed Mobile Dropdowns** - Notification and profile dropdowns overlay properly on all screen sizes
+- ✅ **Responsive Cards & Buttons** - Compact sizing on mobile with smooth breakpoint transitions
+- ✅ **All Dependencies Current** - Every package at latest stable version with 0 vulnerabilities
 
 ## 🌟 Key Improvements in v3.0
 
