@@ -36,6 +36,11 @@
                             <h1 class="h4 mb-0 fw-bold text-primary">Metis</h1>
                         </a>
 
+                        <!-- Sidebar Toggle -->
+                        <button class="hamburger-menu" type="button" data-sidebar-toggle aria-label="Toggle sidebar">
+                            <i class="bi bi-list"></i>
+                        </button>
+
                         <!-- Search Bar with Alpine.js -->
                         <div class="search-container flex-grow-1 mx-4" x-data="searchComponent">
                             <div class="position-relative">
@@ -292,14 +297,8 @@
                 </div>
             </aside>
 
-            <!-- Floating Hamburger Menu -->
-            <button class="hamburger-menu" 
-                    type="button" 
-                    data-sidebar-toggle
-                    aria-label="Toggle sidebar">
-                <i class="bi bi-list"></i>
-            </button>
-
+            <!-- Sidebar Backdrop (mobile overlay) -->
+        <div class="sidebar-backdrop" aria-hidden="true"></div>
             <!-- Main Content -->
             <main class="admin-main">
                 <div class="container-fluid p-4 p-lg-4">
@@ -445,7 +444,7 @@
                             <p class="mb-0 text-muted">© 2025 Modern Bootstrap Admin Template</p>
                         </div>
                         <div class="col-md-6 text-md-end">
-                            <p class="mb-0 text-muted">Built with Bootstrap 5.3.7</p>
+                            <p class="mb-0 text-muted">Built with Bootstrap 5.3.8</p>
                         </div>
                     </div>
                 </div>
@@ -459,34 +458,5 @@
 
     <!-- Main App Script -->
     <script type="module" src="./scripts/main.js"></script>
-
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const toggleButton = document.querySelector('[data-sidebar-toggle]');
-        const wrapper = document.getElementById('admin-wrapper');
-
-        if (toggleButton && wrapper) {
-          const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
-          if (isCollapsed) {
-            wrapper.classList.add('sidebar-collapsed');
-            toggleButton.classList.add('is-active');
-          }
-
-          toggleButton.addEventListener('click', () => {
-            const isCurrentlyCollapsed = wrapper.classList.contains('sidebar-collapsed');
-            
-            if (isCurrentlyCollapsed) {
-              wrapper.classList.remove('sidebar-collapsed');
-              toggleButton.classList.remove('is-active');
-              localStorage.setItem('sidebar-collapsed', 'false');
-            } else {
-              wrapper.classList.add('sidebar-collapsed');
-              toggleButton.classList.add('is-active');
-              localStorage.setItem('sidebar-collapsed', 'true');
-            }
-          });
-        }
-      });
-    </script>
 </body>
 </html>

@@ -19,6 +19,7 @@ import {
 import { ThemeManager } from './utils/theme-manager.js';
 import { DashboardManager } from './components/dashboard.js';
 import { NotificationManager } from './utils/notifications.js';
+import { SidebarManager } from './components/sidebar.js';
 import { iconManager } from './utils/icon-manager.js';
 
 // Import Alpine.js for reactive components
@@ -54,6 +55,7 @@ class AdminApp {
       // Initialize core managers
       this.themeManager = new ThemeManager();
       this.notificationManager = new NotificationManager();
+      this.sidebarManager = new SidebarManager();
       this.iconManager = iconManager;
 
       // Preload common icons for better performance

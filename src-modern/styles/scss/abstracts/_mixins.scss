@@ -279,31 +279,23 @@
 
 // Hamburger menu mixin
 @mixin hamburger-menu() {
-  position: fixed;
-  top: 0.75rem;
-  left: 216px;
-  z-index: 1050;
   background: none;
   border: none;
   padding: 0.5rem;
   cursor: pointer;
   color: var(--bs-secondary-color);
-  transition: all 0.2s ease-in-out;
+  transition: background-color 0.15s ease-in-out;
   border-radius: 6px;
   width: 40px;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  
+  flex-shrink: 0;
+
   &:hover {
     color: var(--bs-emphasis-color);
-    background-color: var(--bs-secondary-bg-subtle);
-  }
-  
-  @include media-breakpoint-down(lg) {
-    left: 1rem;
-    top: 0.75rem;
+    background-color: rgba(var(--bs-secondary-rgb), 0.08);
   }
 }
 

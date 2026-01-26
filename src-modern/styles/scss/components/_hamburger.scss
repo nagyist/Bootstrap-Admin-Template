@@ -1,51 +1,60 @@
-/* === Hamburger Menu === */
+// ==========================================================================
+// Hamburger Menu Button
+// Desktop: absolutely positioned at the sidebar's right edge inside header
+// Mobile: normal flow inside header navbar
+// ==========================================================================
+
 .hamburger-menu {
-    position: fixed;
-    top: 0.75rem;
-    left: 216px; 
-    z-index: 1050;
-    background: none;
-    border: none;
-    padding: 0.5rem;
-    cursor: pointer;
-    color: #6c757d;
-    transition: background-color 0.2s ease-in-out;
-    border-radius: 6px;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  color: var(--bs-secondary-color);
+  transition: background-color 0.15s ease-in-out;
+  border-radius: 6px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 
-.hamburger-menu:hover {
-    color: #495057;
-    background-color: rgba(0, 0, 0, 0.05);
-}
+  &:hover {
+    color: var(--bs-emphasis-color);
+    background-color: rgba(var(--bs-secondary-rgb), 0.08);
+  }
 
-.hamburger-menu:focus {
+  &:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-}
+    box-shadow: 0 0 0 2px rgba(var(--bs-primary-rgb), 0.25);
+  }
 
-.hamburger-menu:active {
+  &:active {
     transform: scale(0.95);
-}
+  }
 
-.hamburger-menu i {
+  i {
     font-size: 1.2rem;
     transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-}
+  }
 
-/* Rotate icon when active */
-.hamburger-menu.is-active i {
+  // Rotate icon when sidebar is collapsed (desktop)
+  &.is-active i {
     transform: rotate(180deg);
+  }
 }
 
-/* Responsive positioning for mobile */
-@media (max-width: 991.98px) {
-    .hamburger-menu {
-        left: 1rem;
-        top: 0.75rem;
-    }
-} 
+// Desktop: pin hamburger at sidebar's right edge
+@media (min-width: 992px) {
+  .admin-header .hamburger-menu {
+    position: absolute;
+    left: calc(var(--sidebar-width) - 40px - 0.5rem);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  // Override :active transform so vertical centering isn't lost
+  .admin-header .hamburger-menu:active {
+    transform: translateY(-50%) scale(0.95);
+  }
+}
