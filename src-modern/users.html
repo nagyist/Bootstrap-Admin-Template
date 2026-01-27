@@ -335,7 +335,7 @@
                     </div>
 
                     <!-- Users Management Container -->
-                    <div x-data="userTable" x-init="init()">
+                    <div x-data="userTable">
                         
                         <!-- User Stats Widgets -->
                         <div class="row g-4 g-lg-5 g-xl-6 mb-5 mb-lg-5 mb-xl-6">
@@ -636,11 +636,8 @@
                             </div>
                             <div class="card-body p-0">
                                 <!-- Bulk Actions Bar -->
-                                <div class="bulk-actions-bar p-3 bg-primary bg-opacity-10 border-bottom border-primary border-opacity-25" 
-                                     x-show="selectedUsers.length > 0" 
-                                     x-transition:enter="transition ease-out duration-200"
-                                     x-transition:enter-start="opacity-0 transform translate-y-2"
-                                     x-transition:enter-end="opacity-100 transform translate-y-0">
+                                <div class="bulk-actions-bar p-3 bg-primary bg-opacity-10 border-bottom border-primary border-opacity-25"
+                                     x-show="selectedUsers.length > 0">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="d-flex align-items-center">
                                             <i class="bi bi-check-circle-fill text-primary me-2"></i>
@@ -658,8 +655,8 @@
                                             <button class="btn btn-sm btn-danger" @click="bulkAction('delete')">
                                                 <i class="bi bi-trash me-1"></i>Delete
                                             </button>
-                                            <button class="btn btn-sm btn-outline-secondary" @click="selectedUsers = []" title="Clear selection">
-                                                <i class="bi bi-x-lg"></i>
+                                            <button class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center justify-content-center px-2" @click="selectedUsers = []" title="Clear selection">
+                                                <i class="bi bi-x-lg" style="margin-left: 7px"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -672,7 +669,7 @@
                                             <tr>
                                                 <th style="width: 40px;">
                                                     <input type="checkbox" 
-                                                           class="form-check-input user-select-checkbox" 
+                                                           class="user-select-checkbox"
                                                            @change="toggleAll($event.target.checked)"
                                                            :checked="selectedUsers.length === filteredUsers.length && filteredUsers.length > 0">
                                                 </th>
@@ -700,10 +697,11 @@
                                             <template x-for="user in paginatedUsers" :key="user.id">
                                                 <tr :class="{ 'selected': selectedUsers.includes(user.id) }">
                                                     <td>
-                                                        <input type="checkbox" 
-                                                               class="form-check-input user-select-checkbox" 
+                                                        <input type="checkbox"
+                                                               class="user-select-checkbox"
                                                                :value="user.id"
-                                                               x-model="selectedUsers">
+                                                               :checked="selectedUsers.includes(user.id)"
+                                                               @change="toggleUser(user.id)">
                                                     </td>
                                                     <td>
                                                         <div class="d-flex align-items-center">
@@ -801,10 +799,10 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-6">
-                            <p class="mb-0 text-muted">© 2025 Modern Bootstrap Admin Template</p>
+                            <p class="mb-0 text-muted">© 2026 Modern Bootstrap Admin Template</p>
                         </div>
                         <div class="col-md-6 text-md-end">
-                            <p class="mb-0 text-muted">Built with Bootstrap 5.3.8</p>
+                            <p class="mb-0 text-muted">Built with Bootstrap 5 by <a href="https://colorlib.com/" target="_blank" rel="noopener noreferrer">Colorlib</a></p>
                         </div>
                     </div>
                 </div>

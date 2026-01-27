@@ -10,8 +10,8 @@
     <meta name="keywords" content="bootstrap, admin, dashboard, users, data tables, CRUD">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="./assets/favicon-CvUZKS4z.svg">
-    <link rel="icon" type="image/png" href="./assets/favicon-B_cwPWBd.png">
+    <link rel="icon" type="image/svg+xml" href="./assets/icons/favicon.svg">
+    <link rel="icon" type="image/png" href="./assets/icons/favicon.png">
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="./assets/manifest-DTaoG9pG.json">
@@ -28,9 +28,9 @@
 <script type="module" crossorigin src="./assets/vendor-bootstrap-C9iorZI5.js"></script>
 <script type="module" crossorigin src="./assets/vendor-charts-DGwYAWel.js"></script>
 <script type="module" crossorigin src="./assets/vendor-ui-CflGdlft.js"></script>
-<script type="module" crossorigin src="./assets/main--6K6KPfL.js"></script>
-<script type="module" crossorigin src="./assets/users-B_8qHPdr.js"></script>
-<link rel="stylesheet" crossorigin href="./assets/main-BzXkCVWJ.css">
+<script type="module" crossorigin src="./assets/main-B24LRf0x.js"></script>
+<script type="module" crossorigin src="./assets/users-DaDyOi2I.js"></script>
+<link rel="stylesheet" crossorigin href="./assets/main-BQhM7myw.css">
 
 <body data-page="users" class="user-management">
     <!-- Admin App Container -->
@@ -43,7 +43,7 @@
                     <div class="container-fluid">
                         <!-- Logo/Brand -->
                         <a class="navbar-brand d-flex align-items-center" href="./index.html">
-                            <img src="data:image/svg+xml,%3csvg%20width='32'%20height='32'%20viewBox='0%200%2032%2032'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3c!--%20Background%20circle%20for%20the%20M%20--%3e%3ccircle%20cx='16'%20cy='16'%20r='16'%20fill='url(%23logoGradient)'/%3e%3c!--%20Centered%20Letter%20M%20--%3e%3cpath%20d='M10%2024V8h2.5l2.5%206.5L17.5%208H20v16h-2V12.5L16.5%2020h-1L14%2012.5V24H10z'%20fill='white'%20font-weight='700'/%3e%3c!--%20Gradient%20definition%20--%3e%3cdefs%3e%3clinearGradient%20id='logoGradient'%20x1='0%25'%20y1='0%25'%20x2='100%25'%20y2='100%25'%3e%3cstop%20offset='0%25'%20style='stop-color:%236366f1;stop-opacity:1'%20/%3e%3cstop%20offset='100%25'%20style='stop-color:%238b5cf6;stop-opacity:1'%20/%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e" alt="Logo" height="32" class="d-inline-block align-text-top me-2">
+                            <img src="./assets/images/logo.svg" alt="Logo" height="32" class="d-inline-block align-text-top me-2">
                             <h1 class="h4 mb-0 fw-bold text-primary">Metis</h1>
                         </a>
 
@@ -135,7 +135,7 @@
                                         type="button" 
                                         data-bs-toggle="dropdown" 
                                         aria-expanded="false">
-                                    <img src="data:image/svg+xml,%3csvg%20width='32'%20height='32'%20viewBox='0%200%2032%2032'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3c!--%20Background%20circle%20--%3e%3ccircle%20cx='16'%20cy='16'%20r='16'%20fill='url(%23avatarGradient)'/%3e%3c!--%20Person%20silhouette%20--%3e%3cg%20fill='white'%20opacity='0.9'%3e%3c!--%20Head%20--%3e%3ccircle%20cx='16'%20cy='12'%20r='5'/%3e%3c!--%20Body%20--%3e%3cpath%20d='M16%2018c-5.5%200-10%202.5-10%207v1h20v-1c0-4.5-4.5-7-10-7z'/%3e%3c/g%3e%3c!--%20Subtle%20border%20--%3e%3ccircle%20cx='16'%20cy='16'%20r='15.5'%20fill='none'%20stroke='rgba(255,255,255,0.2)'%20stroke-width='1'/%3e%3c!--%20Gradient%20definition%20--%3e%3cdefs%3e%3clinearGradient%20id='avatarGradient'%20x1='0%25'%20y1='0%25'%20x2='100%25'%20y2='100%25'%3e%3cstop%20offset='0%25'%20style='stop-color:%236b7280;stop-opacity:1'%20/%3e%3cstop%20offset='100%25'%20style='stop-color:%234b5563;stop-opacity:1'%20/%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e" 
+                                    <img src="./assets/images/avatar-placeholder.svg" 
                                          alt="User Avatar" 
                                          width="24" 
                                          height="24" 
@@ -167,7 +167,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="https://dashboardpack.com/?utm_source=metis&amp;utm_medium=sidebar&amp;utm_campaign=go_pro" target="_blank" rel="noopener">
+                                <a class="nav-link" href="https://dashboardpack.com/?utm_source=metis&amp;utm_medium=sidebar&amp;utm_campaign=go_pro_metis" target="_blank" rel="noopener">
                                     <i class="bi bi-rocket-takeoff"></i>
                                     <span>Go Pro</span>
                                     <span class="badge bg-danger rounded-pill ms-auto">Hot</span>
@@ -342,7 +342,7 @@
                     </div>
 
                     <!-- Users Management Container -->
-                    <div x-data="userTable" x-init="init()">
+                    <div x-data="userTable">
                         
                         <!-- User Stats Widgets -->
                         <div class="row g-4 g-lg-5 g-xl-6 mb-5 mb-lg-5 mb-xl-6">
@@ -643,11 +643,8 @@
                             </div>
                             <div class="card-body p-0">
                                 <!-- Bulk Actions Bar -->
-                                <div class="bulk-actions-bar p-3 bg-primary bg-opacity-10 border-bottom border-primary border-opacity-25" 
-                                     x-show="selectedUsers.length > 0" 
-                                     x-transition:enter="transition ease-out duration-200"
-                                     x-transition:enter-start="opacity-0 transform translate-y-2"
-                                     x-transition:enter-end="opacity-100 transform translate-y-0">
+                                <div class="bulk-actions-bar p-3 bg-primary bg-opacity-10 border-bottom border-primary border-opacity-25"
+                                     x-show="selectedUsers.length > 0">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="d-flex align-items-center">
                                             <i class="bi bi-check-circle-fill text-primary me-2"></i>
@@ -679,7 +676,7 @@
                                             <tr>
                                                 <th style="width: 40px;">
                                                     <input type="checkbox" 
-                                                           class="form-check-input user-select-checkbox" 
+                                                           class="user-select-checkbox"
                                                            @change="toggleAll($event.target.checked)"
                                                            :checked="selectedUsers.length === filteredUsers.length && filteredUsers.length > 0">
                                                 </th>
@@ -707,10 +704,11 @@
                                             <template x-for="user in paginatedUsers" :key="user.id">
                                                 <tr :class="{ 'selected': selectedUsers.includes(user.id) }">
                                                     <td>
-                                                        <input type="checkbox" 
-                                                               class="form-check-input user-select-checkbox" 
+                                                        <input type="checkbox"
+                                                               class="user-select-checkbox"
                                                                :value="user.id"
-                                                               x-model="selectedUsers">
+                                                               :checked="selectedUsers.includes(user.id)"
+                                                               @change="toggleUser(user.id)">
                                                     </td>
                                                     <td>
                                                         <div class="d-flex align-items-center">

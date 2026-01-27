@@ -1,4 +1,5 @@
 import Alpine from 'alpinejs';
+import ApexCharts from 'apexcharts';
 
 document.addEventListener('alpine:init', () => {
   Alpine.data('userTable', () => ({
@@ -224,13 +225,11 @@ document.addEventListener('alpine:init', () => {
         }
     },
 
-    toggleUser(userId, event) {
-        if (event.target.checked) {
-            if (!this.selectedUsers.includes(userId)) {
-                this.selectedUsers.push(userId);
-            }
-        } else {
+    toggleUser(userId) {
+        if (this.selectedUsers.includes(userId)) {
             this.selectedUsers = this.selectedUsers.filter(id => id !== userId);
+        } else {
+            this.selectedUsers = [...this.selectedUsers, userId];
         }
     },
 
