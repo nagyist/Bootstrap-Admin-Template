@@ -245,6 +245,81 @@ These SCSS variables are also exposed as CSS custom properties:
 }
 ```
 
+### Responsive Sidebar Behavior
+
+The sidebar has two distinct modes controlled by the `SidebarManager` class. Both modes are driven by the CSS custom properties above, so changing them adjusts both modes simultaneously.
+
+**Desktop (>= 992px):** Toggle between full and collapsed sidebar by changing:
+
+```scss
+// Full sidebar width
+$sidebar-width: 280px;
+
+// Collapsed (mini) sidebar width - shows icons only
+$sidebar-mini-width: 70px;
+```
+
+**Mobile (< 992px):** The sidebar uses the full `--sidebar-width` value but slides in as an overlay. To adjust the mobile sidebar width independently, add a media query override:
+
+```scss
+@media (max-width: 991.98px) {
+  :root {
+    --sidebar-width: 260px; // narrower on mobile if desired
+  }
+}
+```
+
+### Hamburger Button Styling
+
+The hamburger toggle button (`.hamburger-menu`) is defined in `components/_hamburger.scss`. Key customization points:
+
+```scss
+.hamburger-menu {
+  // Button size
+  width: 40px;
+  height: 40px;
+
+  // Icon size
+  i { font-size: 1.2rem; }
+
+  // Hover background
+  &:hover {
+    background-color: rgba(var(--bs-secondary-rgb), 0.08);
+  }
+}
+```
+
+On desktop, the hamburger is absolutely positioned at the right edge of the sidebar. Adjust its horizontal position by changing the `left` value:
+
+```scss
+@media (min-width: 992px) {
+  .admin-header .hamburger-menu {
+    left: calc(var(--sidebar-width) - 40px - 0.5rem);
+  }
+}
+```
+
+### Mobile Sidebar Overlay
+
+The sidebar backdrop (`.sidebar-backdrop`) provides the semi-transparent overlay behind the mobile sidebar. Customize its appearance:
+
+```scss
+.sidebar-backdrop {
+  background-color: rgba(0, 0, 0, 0.5); // darkness level
+  z-index: 1040;
+}
+```
+
+The mobile sidebar shadow can be adjusted in `layout/_sidebar.scss`:
+
+```scss
+@media (max-width: 991.98px) {
+  .admin-sidebar.show {
+    box-shadow: 4px 0 16px rgba(0, 0, 0, 0.15);
+  }
+}
+```
+
 ---
 
 ## Adding Custom Components
@@ -455,6 +530,7 @@ src-modern/styles/scss/
 │   ├── _cards.scss
 │   ├── _charts.scss
 │   ├── _forms.scss
+│   ├── _hamburger.scss     # Sidebar toggle button
 │   ├── _icons.scss
 │   ├── _modals.scss
 │   ├── _navigation.scss

@@ -38,6 +38,7 @@ The sidebar provides navigation and uses Bootstrap's collapse for submenus.
 ```
 
 **Submenu with Collapse:**
+
 ```html
 <li class="nav-item">
   <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#elementsSubmenu">
@@ -58,9 +59,38 @@ The sidebar provides navigation and uses Bootstrap's collapse for submenus.
 </li>
 ```
 
+#### SidebarManager
+
+All sidebar toggle behavior is handled by the `SidebarManager` class (`scripts/components/sidebar.js`). It is initialized automatically on every page — no inline scripts are needed.
+
+**Desktop behavior (>= 992px):**
+
+- Clicking the hamburger button toggles between full sidebar (280px) and mini sidebar (70px)
+- State is saved to `localStorage` and restored on page load
+- The `sidebar-collapsed` class is added to `#admin-wrapper`
+
+**Mobile behavior (< 992px):**
+
+- Sidebar is hidden off-screen by default (`transform: translateX(-100%)`)
+- Clicking the hamburger slides the sidebar in as an overlay with a backdrop
+- Closing methods: backdrop click, Escape key, or hamburger button
+- Background scroll is locked while the sidebar is open
+
+**Backdrop element:**
+
+Each page should include a `.sidebar-backdrop` div inside `#admin-wrapper`. If missing, `SidebarManager` creates one automatically:
+
+```html
+<div id="admin-wrapper">
+  <div class="sidebar-backdrop"></div>
+  <aside class="admin-sidebar" id="admin-sidebar">...</aside>
+  <!-- rest of layout -->
+</div>
+```
+
 ### Header
 
-The header contains the brand, search, and user controls.
+The header contains the brand, hamburger toggle, search, and user controls.
 
 ```html
 <header class="admin-header">
@@ -68,9 +98,16 @@ The header contains the brand, search, and user controls.
     <div class="container-fluid">
       <!-- Brand -->
       <a class="navbar-brand d-flex align-items-center" href="./index.html">
-        <img src="/assets/images/logo.svg" alt="Logo" height="32">
+        <img src="/assets/images/logo.svg" alt="Logo" height="32"
+             class="d-inline-block align-text-top me-2">
         <h1 class="h4 mb-0 fw-bold text-primary">Metis</h1>
       </a>
+
+      <!-- Sidebar Toggle (hamburger) -->
+      <button class="hamburger-menu" type="button" data-sidebar-toggle
+              aria-label="Toggle sidebar">
+        <i class="bi bi-list"></i>
+      </button>
 
       <!-- Search Bar with Alpine.js -->
       <div class="search-container flex-grow-1 mx-4" x-data="searchComponent">
@@ -86,6 +123,12 @@ The header contains the brand, search, and user controls.
   </nav>
 </header>
 ```
+
+The hamburger button is placed right after the brand in the HTML flow. On desktop (>= 992px), it is absolutely positioned at the right edge of the sidebar. On mobile, it stays in normal flow within the navbar. The `data-sidebar-toggle` attribute is what `SidebarManager` listens for — no other click handlers should be attached to this button.
+
+### Header Dropdowns
+
+Notification and profile dropdown menus use `position: absolute` to overlay properly on all screen sizes. Bootstrap's default dropdown positioning is overridden in `components/_navigation.scss` to prevent dropdowns from pushing page content.
 
 ### Cards
 
@@ -105,7 +148,11 @@ Standard Bootstrap 5 card component with custom styling.
 </div>
 ```
 
-**Note:** Cards in this template have `border-width: 0` and use `box-shadow` for elevation.
+**Notes:**
+
+- Cards have `border-width: 0` and use `box-shadow` for elevation
+- On mobile (< 992px), cards use compact padding and reduced margins for better use of screen space
+- Card headers and footers also adapt with smaller font sizes and tighter spacing on mobile
 
 ---
 
@@ -514,6 +561,8 @@ The template includes these Alpine.js components registered in `main.js`:
 4. **Mobile-first approach** - Design for mobile, then scale up
 5. **Accessibility** - Include ARIA labels and support keyboard navigation
 6. **Use the page data attribute** - Set `data-page` on body for page-specific JS
+7. **No inline sidebar scripts** - All sidebar toggle logic goes through `SidebarManager`; duplicate handlers cause desktop toggle to cancel out
+8. **Consistent breakpoint** - Use `992px` / `991.98px` (`lg`) as the single mobile/desktop breakpoint throughout the template
 
 ---
 

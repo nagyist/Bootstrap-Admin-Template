@@ -9,6 +9,7 @@ Detailed documentation for developing with the Metis Bootstrap 5 Admin Template.
 - [Architecture](#architecture)
 - [Adding New Features](#adding-new-features)
 - [Component Patterns](#component-patterns)
+- [Sidebar & Responsive Layout](#sidebar--responsive-layout)
 - [Styling Guide](#styling-guide)
 - [Build Configuration](#build-configuration)
 
@@ -50,6 +51,7 @@ src-modern/
 │   │   ├── reports.js
 │   │   ├── security.js
 │   │   ├── settings.js
+│   │   ├── sidebar.js          # SidebarManager (desktop collapse + mobile overlay)
 │   │   └── users.js
 │   └── utils/
 │       ├── theme-manager.js    # Dark/light mode handling
@@ -96,6 +98,24 @@ switch (currentPage) {
   // ...
 }
 ```
+
+### SidebarManager
+
+The `SidebarManager` class in `scripts/components/sidebar.js` is the single source of truth for all sidebar toggle behavior. It is initialized by `main.js` on every page and handles two distinct modes:
+
+- **Desktop (>=992px):** Toggles between full-width (280px) and collapsed (70px) sidebar via the `sidebar-collapsed` class on `#admin-wrapper`. State is persisted in `localStorage`.
+- **Mobile (<992px):** Opens the sidebar as a slide-in overlay with a backdrop. Supports closing via backdrop click, Escape key, and scroll-lock on the body.
+
+**Key elements:**
+
+| Selector | Role |
+|----------|------|
+| `#admin-wrapper` | Receives `sidebar-collapsed` class on desktop |
+| `#admin-sidebar` | The sidebar element; receives `show` class on mobile |
+| `[data-sidebar-toggle]` | The hamburger button that triggers `toggle()` |
+| `.sidebar-backdrop` | Semi-transparent overlay behind mobile sidebar |
+
+**Important:** Do not add inline `<script>` blocks that also listen for `[data-sidebar-toggle]` clicks. The `SidebarManager` is the only handler needed. Duplicate listeners will cancel each other out on desktop (both toggle the same class on the same click).
 
 ### Dynamic Imports
 
@@ -322,6 +342,113 @@ const chartOptions = {
 const chart = new ApexCharts(document.querySelector('#chart'), chartOptions);
 chart.render();
 ```
+
+## Sidebar & Responsive Layout
+
+The template uses a consistent `lg` breakpoint (992px) across all responsive behavior. Below 992px the layout switches to a mobile-optimized mode.
+
+### Breakpoint Reference
+
+| Breakpoint | Sidebar | Header | Cards & Buttons |
+|------------|---------|--------|-----------------|
+| >= 992px (desktop) | Fixed left panel, collapsible to 70px mini sidebar | Full navbar with search bar | Standard sizing |
+| < 992px (mobile) | Hidden off-screen, slides in as overlay | Compact navbar, hamburger in flow | Compact sizing with smaller padding |
+
+### Desktop Sidebar Collapse
+
+On desktop, clicking the hamburger toggles the `sidebar-collapsed` class on `#admin-wrapper`:
+
+- **Expanded (default):** Sidebar is `var(--sidebar-width)` (280px) with icon + text labels
+- **Collapsed:** Sidebar shrinks to `var(--sidebar-mini-width)` (70px) with icons only
+
+The main content area shifts automatically via CSS:
+
+```scss
+// layout/_main.scss
+.admin-main {
+  margin-left: var(--sidebar-width);
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-collapsed .admin-main {
+  margin-left: var(--sidebar-mini-width);
+}
+```
+
+### Mobile Sidebar Overlay
+
+On mobile, the sidebar is positioned off-screen with `transform: translateX(-100%)` and slides in when the `show` class is added:
+
+```scss
+// layout/_sidebar.scss
+@media (max-width: 991.98px) {
+  .admin-sidebar {
+    transform: translateX(-100%);
+    z-index: 1041; // above backdrop, below modals
+
+    &.show {
+      transform: translateX(0);
+      box-shadow: 4px 0 16px rgba(0, 0, 0, 0.15);
+    }
+  }
+}
+```
+
+The `.sidebar-backdrop` element provides a semi-transparent overlay behind the sidebar. It is created automatically by `SidebarManager` if not present in the HTML.
+
+**Mobile sidebar behaviors:**
+- Background scroll is locked (`overflow: hidden` on body) when sidebar is open
+- Backdrop click closes the sidebar
+- Escape key closes the sidebar
+- Resizing from mobile to desktop cleans up overlay state and restores collapsed preference
+
+### Hamburger Button Placement
+
+The hamburger button (`[data-sidebar-toggle]`) lives inside the header navbar, immediately after the `.navbar-brand`. On desktop, it is absolutely positioned at the right edge of the sidebar:
+
+```scss
+// components/_hamburger.scss
+@media (min-width: 992px) {
+  .admin-header .hamburger-menu {
+    position: absolute;
+    left: calc(var(--sidebar-width) - 40px - 0.5rem);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+```
+
+On mobile, the hamburger sits in normal document flow within the navbar.
+
+### Z-Index Layering
+
+The template uses a deliberate z-index stack to avoid overlap conflicts:
+
+| Layer | Z-Index | Element |
+|-------|---------|---------|
+| Header | 1030 | `.admin-header` (Bootstrap `$zindex-fixed`) |
+| Sidebar (desktop) | 1035 | `.admin-sidebar` |
+| Backdrop | 1040 | `.sidebar-backdrop` (`$zindex-modal-backdrop`) |
+| Sidebar (mobile) | 1041 | `.admin-sidebar.show` |
+| Modals | 1050+ | Bootstrap modals |
+
+### Responsive Cards & Buttons
+
+Cards and buttons use compact sizing on mobile for better touch usability:
+
+```scss
+@media (max-width: 991.98px) {
+  .card {
+    // Reduced padding and margins
+  }
+
+  .btn {
+    // Smaller padding for touch targets
+  }
+}
+```
+
+These responsive adjustments are defined in `components/_cards.scss` and `components/_buttons.scss`.
 
 ## Styling Guide
 
