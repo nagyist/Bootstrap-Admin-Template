@@ -50,6 +50,77 @@
 - **Modern Build Pipeline** - Optimized assets with automatic minification
 - **Developer Tools** - Source maps, linting, and debugging support
 
+## Professional Admin Templates
+
+Take your project to the next level with premium dashboards from [DashboardPack](https://dashboardpack.com/?utm_source=github&utm_medium=readme&utm_campaign=metis) — polished designs, extensive documentation, and ongoing updates included.
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <a href="https://dashboardpack.com/theme-details/tailpanel/?utm_source=github&utm_medium=readme&utm_campaign=metis">
+        <img src="screenshots/tailpanel.png" alt="TailPanel — Tailwind CSS and React powered admin interface" width="100%">
+      </a>
+      <br>
+      <a href="https://dashboardpack.com/theme-details/tailpanel/?utm_source=github&utm_medium=readme&utm_campaign=metis"><strong>TailPanel</strong></a>
+      <br>
+      <sub>React + TypeScript + Tailwind CSS + Vite. 9 unique dashboards with light/dark toggle.</sub>
+    </td>
+    <td align="center" width="50%">
+      <a href="https://dashboardpack.com/theme-details/admindek-html/?utm_source=github&utm_medium=readme&utm_campaign=metis">
+        <img src="screenshots/admindek.png" alt="Admindek — enterprise-grade Bootstrap 5 admin dashboard" width="100%">
+      </a>
+      <br>
+      <a href="https://dashboardpack.com/theme-details/admindek-html/?utm_source=github&utm_medium=readme&utm_campaign=metis"><strong>Admindek</strong></a>
+      <br>
+      <sub>Bootstrap 5 + vanilla JS. 100+ components, theme switcher, RTL, 10 color presets.</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <a href="https://dashboardpack.com/theme-details/adminty-html-dashboard/?utm_source=github&utm_medium=readme&utm_campaign=metis">
+        <img src="screenshots/adminty.png" alt="Adminty — large-scale admin template with 160+ pre-built pages" width="100%">
+      </a>
+      <br>
+      <a href="https://dashboardpack.com/theme-details/adminty-html-dashboard/?utm_source=github&utm_medium=readme&utm_campaign=metis"><strong>Adminty</strong></a>
+      <br>
+      <sub>Bootstrap 5. 160+ pages, rich component library for enterprise applications.</sub>
+    </td>
+    <td align="center" width="50%">
+      <a href="https://dashboardpack.com/theme-details/architectui-dashboard-html-pro/?utm_source=github&utm_medium=readme&utm_campaign=metis">
+        <img src="screenshots/architectui.png" alt="ArchitectUI — highly customizable admin panel with 250+ elements" width="100%">
+      </a>
+      <br>
+      <a href="https://dashboardpack.com/theme-details/architectui-dashboard-html-pro/?utm_source=github&utm_medium=readme&utm_campaign=metis"><strong>ArchitectUI</strong></a>
+      <br>
+      <sub>Bootstrap 5. 250+ elements, component-driven architecture, 9 dashboard styles.</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <a href="https://dashboardpack.com/theme-details/kero-jquery-html-dashboard-pro/?utm_source=github&utm_medium=readme&utm_campaign=metis">
+        <img src="screenshots/kero.png" alt="Kero — versatile admin dashboard with Webpack build pipeline" width="100%">
+      </a>
+      <br>
+      <a href="https://dashboardpack.com/theme-details/kero-jquery-html-dashboard-pro/?utm_source=github&utm_medium=readme&utm_campaign=metis"><strong>Kero</strong></a>
+      <br>
+      <sub>Bootstrap 5 + Webpack. Horizontal and sidebar navigation modes, SASS customization.</sub>
+    </td>
+    <td align="center" width="50%">
+      <a href="https://dashboardpack.com/theme-details/cryptocurrency-dashboard/?utm_source=github&utm_medium=readme&utm_campaign=metis">
+        <img src="screenshots/cryptocurrency.png" alt="Cryptocurrency Dashboard — digital asset monitoring admin template" width="100%">
+      </a>
+      <br>
+      <a href="https://dashboardpack.com/theme-details/cryptocurrency-dashboard/?utm_source=github&utm_medium=readme&utm_campaign=metis"><strong>Cryptocurrency Dashboard</strong></a>
+      <br>
+      <sub>Bootstrap. Tailored for ICO launches, crypto wallets, and blockchain analytics.</sub>
+    </td>
+  </tr>
+</table>
+
+<p align="center">
+  <a href="https://dashboardpack.com/?utm_source=github&utm_medium=readme&utm_campaign=metis"><strong>See All Templates on DashboardPack</strong></a>
+</p>
+
 ## 🚀 Quick Start
 
 ### Prerequisites
