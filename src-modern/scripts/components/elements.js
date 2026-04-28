@@ -3,6 +3,7 @@
 // ==========================================================================
 
 import Alpine from 'alpinejs';
+import { createSearchComponent } from '../utils/search-component.js';
 
 // Elements data configuration
 const elementsData = [
@@ -228,44 +229,20 @@ document.addEventListener('alpine:init', () => {
     }));
 
     // Enhanced search component for elements
-    Alpine.data('searchComponent', () => ({
-        query: '',
-        results: [],
-        isLoading: false,
-        
-        async search() {
-            if (this.query.length < 2) {
-                this.results = [];
-                return;
-            }
-            
-            this.isLoading = true;
-            // Simulate API search delay
-            await new Promise(resolve => setTimeout(resolve, 200));
-            
-            // Search through elements
-            const elementResults = elementsData.filter(component =>
-                component.title.toLowerCase().includes(this.query.toLowerCase()) ||
-                component.description.toLowerCase().includes(this.query.toLowerCase())
-            ).map(component => ({
-                title: component.title,
-                url: component.url,
-                type: 'element'
-            }));
-
-            // Add general page results
+    Alpine.data('searchComponent', createSearchComponent({
+        getResults(query) {
+            const q = query.toLowerCase();
+            const elementResults = elementsData
+                .filter((c) => c.title.toLowerCase().includes(q) || c.description.toLowerCase().includes(q))
+                .map((c) => ({ title: c.title, url: c.url, type: 'element' }));
             const generalResults = [
                 { title: 'Dashboard', url: '/', type: 'page' },
                 { title: 'Analytics', url: '/analytics', type: 'page' },
                 { title: 'Users', url: '/users', type: 'page' },
-                { title: 'Elements', url: '/elements', type: 'page' }
-            ].filter(item => 
-                item.title.toLowerCase().includes(this.query.toLowerCase())
-            );
-
-            this.results = [...elementResults, ...generalResults].slice(0, 8);
-            this.isLoading = false;
-        }
+                { title: 'Elements', url: '/elements', type: 'page' },
+            ].filter((item) => item.title.toLowerCase().includes(q));
+            return [...elementResults, ...generalResults].slice(0, 8);
+        },
     }));
 });
 

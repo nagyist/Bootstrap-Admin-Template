@@ -14,8 +14,12 @@ export default defineConfig({
     outDir: '../dist-modern',
     emptyOutDir: true,
     sourcemap: false,
-    // Warn for chunks over 500KB
-    chunkSizeWarningLimit: 500,
+    target: 'es2020',
+    cssCodeSplit: true,
+    cssMinify: 'lightningcss',
+    minify: true,
+    reportCompressedSize: false,
+    chunkSizeWarningLimit: 600,
 
     rollupOptions: {
       input: {
@@ -44,13 +48,20 @@ export default defineConfig({
 
       output: {
         // Manual chunk splitting for better caching
-        manualChunks: {
-          // Core Bootstrap framework
-          'vendor-bootstrap': ['bootstrap', '@popperjs/core'],
-          // Charting libraries
-          'vendor-charts': ['chart.js', 'apexcharts'],
-          // UI utilities
-          'vendor-ui': ['alpinejs', 'sweetalert2', 'dayjs'],
+        manualChunks(id) {
+          if (id.includes('node_modules/bootstrap/') || id.includes('node_modules/@popperjs/core/')) {
+            return 'vendor-bootstrap';
+          }
+          if (id.includes('node_modules/apexcharts/')) {
+            return 'vendor-charts';
+          }
+          if (
+            id.includes('node_modules/alpinejs/') ||
+            id.includes('node_modules/sweetalert2/') ||
+            id.includes('node_modules/dayjs/')
+          ) {
+            return 'vendor-ui';
+          }
         },
         // Asset naming for better caching
         chunkFileNames: 'assets/[name]-[hash].js',
@@ -87,12 +98,18 @@ export default defineConfig({
     alias: {
       '@': resolve(__dirname, 'src-modern'),
       '~bootstrap': resolve(__dirname, 'node_modules/bootstrap'),
+      '~bootstrap-icons': resolve(__dirname, 'node_modules/bootstrap-icons'),
     },
   },
 
   // Optimize dependencies
   optimizeDeps: {
-    include: ['bootstrap', 'alpinejs', 'chart.js', 'apexcharts', 'sweetalert2', 'dayjs'],
+    include: ['bootstrap', 'alpinejs', 'apexcharts', 'sweetalert2', 'dayjs'],
     exclude: ['lucide'], // Optional dependency, loaded dynamically
+  },
+
+  esbuild: {
+    // Strip console.* and debugger statements from production bundles
+    drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : [],
   },
 });

@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <title>Settings & Preferences - Modern Bootstrap Admin</title>
     
     <!-- SEO Meta Tags -->
@@ -21,6 +23,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"></head>
 
 <body data-page="settings" class="settings-page">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <!-- Admin App Container -->
     <div class="admin-app">
         <div class="admin-wrapper" id="admin-wrapper">
@@ -32,7 +35,7 @@
                         <!-- Logo/Brand -->
                         <a class="navbar-brand d-flex align-items-center" href="./index.html">
                             <img src="/assets/images/logo.svg" alt="Logo" height="32" class="d-inline-block align-text-top me-2">
-                            <h1 class="h4 mb-0 fw-bold text-primary">Metis</h1>
+                            <span class="h4 mb-0 fw-bold text-primary">Metis</span>
                         </a>
 
                         <!-- Sidebar Toggle -->
@@ -307,7 +310,7 @@
             <!-- Sidebar Backdrop (mobile overlay) -->
         <div class="sidebar-backdrop" aria-hidden="true"></div>
             <!-- Main Content -->
-            <main class="admin-main">
+            <main id="main-content" class="admin-main">
                 <div class="container-fluid p-4 p-lg-4">
                     
                     <!-- Page Header -->

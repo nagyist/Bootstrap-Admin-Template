@@ -25,8 +25,8 @@
   }
 
   &:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(var(--bs-primary-rgb), 0.25);
+    outline: 2px solid var(--bs-primary);
+    outline-offset: 2px;
   }
 
   &:active {

@@ -1,4 +1,6 @@
 import Alpine from 'alpinejs';
+import { createSearchComponent } from '../utils/search-component.js';
+import { SIMULATE_PRESENCE_MS, SIMULATE_INBOUND_MS } from '../utils/constants.js';
 
 document.addEventListener('alpine:init', () => {
   Alpine.data('messagesComponent', () => ({
@@ -16,10 +18,12 @@ document.addEventListener('alpine:init', () => {
     currentMessages: [],
     emojis: ['😀', '😃', '😄', '😁', '😊', '😍', '🥰', '😘', '👍', '👏', '🎉', '❤️', '🔥', '💯', '😂', '🤔'],
 
+    _intervals: new Set(),
+
     init() {
       this.loadSampleData();
       this.filterConversations();
-      
+
       // Auto-select first conversation on desktop
       if (window.innerWidth >= 992 && this.conversations.length > 0) {
         this.selectConversation(this.conversations[0]);
@@ -27,6 +31,13 @@ document.addEventListener('alpine:init', () => {
 
       // Simulate typing indicator occasionally
       this.simulateActivity();
+
+      window.addEventListener('pagehide', () => this.destroy(), { once: true });
+    },
+
+    destroy() {
+      this._intervals.forEach(id => clearInterval(id));
+      this._intervals.clear();
     },
 
     loadSampleData() {
@@ -467,30 +478,30 @@ document.addEventListener('alpine:init', () => {
 
     simulateActivity() {
       // Randomly show online/offline status changes
-      setInterval(() => {
+      this._intervals.add(setInterval(() => {
         const randomConv = this.conversations[Math.floor(Math.random() * this.conversations.length)];
         if (Math.random() > 0.7) {
           randomConv.online = !randomConv.online;
         }
-      }, 10000);
+      }, SIMULATE_PRESENCE_MS));
 
       // Occasionally add new messages from others
-      setInterval(() => {
+      this._intervals.add(setInterval(() => {
         if (Math.random() > 0.8) {
           const randomConv = this.conversations[Math.floor(Math.random() * this.conversations.length)];
           const newMessages = [
-            "Hey, are you available?",
-            "I have a quick question",
-            "Thanks for your help earlier!",
-            "Can we schedule a meeting?",
-            "Just wanted to follow up"
+            'Hey, are you available?',
+            'I have a quick question',
+            'Thanks for your help earlier!',
+            'Can we schedule a meeting?',
+            'Just wanted to follow up',
           ];
-          
+
           randomConv.unread += 1;
           randomConv.lastMessage = newMessages[Math.floor(Math.random() * newMessages.length)];
           randomConv.lastMessageTime = 'now';
         }
-      }, 15000);
+      }, SIMULATE_INBOUND_MS));
     },
 
     showNotification(message, type = 'info') {
@@ -510,13 +521,7 @@ document.addEventListener('alpine:init', () => {
   }));
 
   // Search component for header
-  Alpine.data('searchComponent', () => ({
-    query: '',
-    
-    search() {
-      console.log('Searching for:', this.query);
-    }
-  }));
+  Alpine.data('searchComponent', createSearchComponent({ getResults: () => [] }));
 
   // Theme switch component
   Alpine.data('themeSwitch', () => ({

@@ -84,36 +84,60 @@ export class NotificationManager {
   }
 
   createToast(config) {
-    const toastId = `toast-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const toastId = `toast-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
     const toast = document.createElement('div');
-    toast.className = `toast align-items-center text-bg-${config.type} border-0`;
+    toast.className = `toast align-items-center text-bg-${this._sanitizeType(config.type)} border-0`;
     toast.id = toastId;
     toast.role = 'alert';
     toast.setAttribute('aria-live', 'assertive');
     toast.setAttribute('aria-atomic', 'true');
 
-    const closeButton = config.persistent ? '' : `
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-    `;
+    const flexWrap = document.createElement('div');
+    flexWrap.className = 'd-flex';
 
-    const actionButton = config.action ? `
-      <button type="button" class="btn btn-sm btn-outline-light me-2" onclick="${config.action.handler}">
-        ${config.action.text}
-      </button>
-    ` : '';
+    const body = document.createElement('div');
+    body.className = 'toast-body d-flex align-items-center';
 
-    toast.innerHTML = `
-      <div class="d-flex">
-        <div class="toast-body d-flex align-items-center">
-          <i class="${config.icon} me-2"></i>
-          <span class="flex-grow-1">${config.message}</span>
-          ${actionButton}
-        </div>
-        ${closeButton}
-      </div>
-    `;
+    const icon = document.createElement('i');
+    icon.className = `${this._sanitizeIconClass(config.icon)} me-2`;
+    body.appendChild(icon);
 
+    const messageEl = document.createElement('span');
+    messageEl.className = 'flex-grow-1';
+    messageEl.textContent = config.message;
+    body.appendChild(messageEl);
+
+    if (config.action && typeof config.action.handler === 'function') {
+      const actionBtn = document.createElement('button');
+      actionBtn.type = 'button';
+      actionBtn.className = 'btn btn-sm btn-outline-light me-2';
+      actionBtn.textContent = config.action.text || 'Action';
+      actionBtn.addEventListener('click', config.action.handler);
+      body.appendChild(actionBtn);
+    }
+
+    flexWrap.appendChild(body);
+
+    if (!config.persistent) {
+      const closeBtn = document.createElement('button');
+      closeBtn.type = 'button';
+      closeBtn.className = 'btn-close btn-close-white me-2 m-auto';
+      closeBtn.setAttribute('data-bs-dismiss', 'toast');
+      closeBtn.setAttribute('aria-label', 'Close');
+      flexWrap.appendChild(closeBtn);
+    }
+
+    toast.appendChild(flexWrap);
     return toast;
+  }
+
+  _sanitizeType(type) {
+    const allowed = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark', 'error'];
+    return allowed.includes(type) ? type : 'info';
+  }
+
+  _sanitizeIconClass(cls) {
+    return typeof cls === 'string' && /^[\w\s-]+$/.test(cls) ? cls : 'bi bi-info-circle-fill';
   }
 
   getIconForType(type) {
@@ -296,18 +320,28 @@ export class NotificationManager {
     const activityFeed = document.querySelector('.activity-feed');
     if (!activityFeed) return;
 
+    const safeType = this._sanitizeType(notification.type);
+
     const activityItem = document.createElement('div');
     activityItem.className = 'activity-item';
-    activityItem.innerHTML = `
-      <div class="activity-icon bg-${notification.type} bg-opacity-10 text-${notification.type}">
-        <i class="${this.getIconForType(notification.type)}"></i>
-      </div>
-      <div class="activity-content">
-        <p class="mb-1">${notification.message}</p>
-        <small class="text-muted">Just now</small>
-      </div>
-    `;
 
+    const iconWrap = document.createElement('div');
+    iconWrap.className = `activity-icon bg-${safeType} bg-opacity-10 text-${safeType}`;
+    const icon = document.createElement('i');
+    icon.className = this._sanitizeIconClass(this.getIconForType(safeType));
+    iconWrap.appendChild(icon);
+
+    const content = document.createElement('div');
+    content.className = 'activity-content';
+    const p = document.createElement('p');
+    p.className = 'mb-1';
+    p.textContent = notification.message;
+    const time = document.createElement('small');
+    time.className = 'text-muted';
+    time.textContent = 'Just now';
+    content.append(p, time);
+
+    activityItem.append(iconWrap, content);
     activityFeed.insertBefore(activityItem, activityFeed.firstChild);
 
     // Limit activity feed to 10 items

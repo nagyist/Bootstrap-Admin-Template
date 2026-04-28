@@ -54,9 +54,11 @@ src-modern/
 │   │   ├── sidebar.js          # SidebarManager (desktop collapse + mobile overlay)
 │   │   └── users.js
 │   └── utils/
-│       ├── theme-manager.js    # Dark/light mode handling
-│       ├── notifications.js    # SweetAlert2 wrapper
-│       └── icon-manager.js     # Icon library abstraction
+│       ├── theme-manager.js      # Dark/light mode handling
+│       ├── notifications.js      # SweetAlert2 + toast wrapper (XSS-safe DOM rendering)
+│       ├── icon-manager.js       # Icon library abstraction
+│       ├── search-component.js   # Factory for the navbar search Alpine component
+│       └── constants.js          # Shared timing / breakpoint values
 ├── styles/
 │   └── scss/
 │       ├── abstracts/          # Variables, mixins, functions
@@ -322,26 +324,90 @@ Swal.fire({
 
 ### Charts with ApexCharts
 
+The template uses **ApexCharts only** (Chart.js was removed in v3.4.0). ApexCharts mounts into a `<div>` — never `<canvas>`.
+
+```html
+<!-- Always a div, with a min-height so the chart has space before render -->
+<div id="myChart" style="min-height: 320px;"></div>
+```
+
 ```javascript
-const chartOptions = {
-  chart: {
-    type: 'area',
-    height: 350,
-    toolbar: { show: false }
-  },
-  series: [{
-    name: 'Revenue',
-    data: [31, 40, 28, 51, 42, 109, 100]
-  }],
-  xaxis: {
-    categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-  },
+import ApexCharts from 'apexcharts';
+
+const options = {
+  chart: { type: 'area', height: 350, toolbar: { show: false } },
+  series: [{ name: 'Revenue', data: [31, 40, 28, 51, 42, 109, 100] }],
+  xaxis: { categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
   colors: ['#6366f1']
 };
 
-const chart = new ApexCharts(document.querySelector('#chart'), chartOptions);
+const chart = new ApexCharts(document.querySelector('#myChart'), options);
 chart.render();
 ```
+
+**Cleanup:** track chart instances in your component and call `chart.destroy()` when the host unmounts (or in a `pagehide` handler) so SVG nodes and event listeners don't leak. The `DashboardManager` and `analytics` Alpine component both follow this pattern — copy from there when adding a new chart-heavy page.
+
+### Search inputs (`searchComponent`)
+
+Every page registers its own `searchComponent` via the `createSearchComponent` factory in `utils/search-component.js`. Don't redefine the full `query`/`results`/`isLoading`/`search()` shell — pass a `getResults(query)` callback that returns the page-specific results.
+
+```javascript
+import Alpine from 'alpinejs';
+import { createSearchComponent } from '../utils/search-component.js';
+
+document.addEventListener('alpine:init', () => {
+  Alpine.data('searchComponent', createSearchComponent({
+    minLength: 2,
+    delayMs: 200,
+    getResults(query) {
+      const q = query.toLowerCase();
+      return [
+        { title: 'Dashboard', url: '/', type: 'page' },
+        // …
+      ].filter((item) => item.title.toLowerCase().includes(q));
+    },
+  }));
+});
+```
+
+### Cleaning up listeners and timers
+
+Components that call `setInterval`, `setTimeout`, or `addEventListener` should track the IDs and clean them up on `pagehide` (or in Alpine's `destroy()`). Pattern:
+
+```javascript
+Alpine.data('myComponent', () => ({
+  _intervals: new Set(),
+
+  init() {
+    const id = setInterval(() => this.tick(), 1000);
+    this._intervals.add(id);
+    window.addEventListener('pagehide', () => this.destroy(), { once: true });
+  },
+
+  destroy() {
+    this._intervals.forEach((id) => clearInterval(id));
+    this._intervals.clear();
+  },
+}));
+```
+
+Constants for common delays/intervals live in `utils/constants.js` — prefer importing those over scattering literal millisecond values.
+
+### Safe DOM rendering (no `innerHTML` interpolation)
+
+Don't build markup with template literals + `innerHTML` — it's an XSS risk the moment a downstream consumer wires real data in. Use `createElement` + `textContent`:
+
+```javascript
+// 🚫 Don't
+el.innerHTML = `<span>${user.name}</span>`;
+
+// ✅ Do
+const span = document.createElement('span');
+span.textContent = user.name;
+el.replaceChildren(span);
+```
+
+`notifications.js` and the dashboard's recent-orders renderer follow this pattern; copy from there when emitting markup from JS.
 
 ## Sidebar & Responsive Layout
 
@@ -526,38 +592,50 @@ Custom theme styles in `src-modern/styles/scss/themes/`:
 
 ### Vite Config (`vite.config.js`)
 
-Key settings:
+Key settings (Vite 8 with rolldown bundler):
 
 ```javascript
 export default defineConfig({
   root: 'src-modern',
   build: {
     outDir: '../dist-modern',
+    target: 'es2020',
+    cssCodeSplit: true,
+    cssMinify: 'lightningcss',
+    minify: true,
     rollupOptions: {
-      input: {
-        // Multi-page entries
+      input: { /* multi-page entries */ },
+      output: {
+        // Vite 8 / rolldown requires the function form, not the legacy object form.
+        manualChunks(id) {
+          if (id.includes('node_modules/bootstrap/')) return 'vendor-bootstrap';
+          if (id.includes('node_modules/apexcharts/')) return 'vendor-charts';
+          // …
+        }
       }
     }
   },
-  server: {
-    port: 3000,
-    open: true
-  },
+  server: { port: 3000, open: true },
   css: {
     preprocessorOptions: {
-      scss: {
-        api: 'modern-compiler'
-      }
+      scss: { api: 'modern-compiler' }
     }
   },
   resolve: {
     alias: {
       '@': resolve(..., 'src-modern'),
-      '~bootstrap': resolve(..., 'node_modules/bootstrap')
+      '~bootstrap': resolve(..., 'node_modules/bootstrap'),
+      '~bootstrap-icons': resolve(..., 'node_modules/bootstrap-icons')
     }
+  },
+  esbuild: {
+    // Strip console.* and debugger from production bundles
+    drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : []
   }
 });
 ```
+
+The `~bootstrap-icons` alias is required by `_bootstrap-icons-subset.scss` so its `@font-face` `src: url('~bootstrap-icons/font/fonts/...')` can resolve into `node_modules`.
 
 ### Path Aliases
 

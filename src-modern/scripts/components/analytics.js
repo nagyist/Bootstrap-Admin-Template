@@ -1,4 +1,5 @@
 import Alpine from 'alpinejs';
+import { REALTIME_FAST_POLL_MS } from '../utils/constants.js';
 
 document.addEventListener('alpine:init', () => {
   Alpine.data('analyticsComponent', () => ({
@@ -51,12 +52,28 @@ document.addEventListener('alpine:init', () => {
         { type: 'Tablet', percentage: 6.8, users: 3098, icon: 'tablet', color: 'warning' }
     ],
     
+    // Cleanup tracking
+    _intervals: new Set(),
+    _resizeHandler: null,
+
     // Initialize component
     init() {
         this.$nextTick(() => {
             this.initCharts();
             this.startRealTimeUpdates();
         });
+        const onHide = () => this.destroy();
+        window.addEventListener('pagehide', onHide, { once: true });
+    },
+
+    destroy() {
+        this._intervals.forEach(id => clearInterval(id));
+        this._intervals.clear();
+        if (this._resizeHandler) {
+            window.removeEventListener('resize', this._resizeHandler);
+            this._resizeHandler = null;
+        }
+        this.clearExistingCharts();
     },
     
     // Clear existing charts to prevent duplicates
@@ -195,16 +212,16 @@ document.addEventListener('alpine:init', () => {
             this.charts.revenue = new ApexCharts(chartElement, revenueOptions);
             this.charts.revenue.render();
 
-            // Handle window resize
-            window.addEventListener('resize', () => {
+            // Handle window resize (one handler total, replaceable)
+            if (this._resizeHandler) {
+                window.removeEventListener('resize', this._resizeHandler);
+            }
+            this._resizeHandler = () => {
                 if (this.charts.revenue) {
-                    this.charts.revenue.updateOptions({
-                        chart: {
-                            width: '100%'
-                        }
-                    });
+                    this.charts.revenue.updateOptions({ chart: { width: '100%' } });
                 }
-            });
+            };
+            window.addEventListener('resize', this._resizeHandler);
         }
     },
     
@@ -426,10 +443,11 @@ document.addEventListener('alpine:init', () => {
     
     // Start real time updates
     startRealTimeUpdates() {
-        setInterval(() => {
+        const id = setInterval(() => {
             this.updateRealTimeData();
             this.updateRealTimeMetrics();
-        }, 1000);
+        }, REALTIME_FAST_POLL_MS);
+        this._intervals.add(id);
     },
     
     // Update real time chart data
@@ -438,7 +456,7 @@ document.addEventListener('alpine:init', () => {
             const x = new Date().getTime();
             const y = Math.floor(Math.random() * (1300 - 1200 + 1)) + 1200;
             
-            let series = this.charts.realTime.w.config.series[0].data.slice();
+            const series = this.charts.realTime.w.config.series[0].data.slice();
             series.push([x, y]);
             series.shift();
             

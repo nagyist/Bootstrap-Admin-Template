@@ -1,4 +1,5 @@
 import Alpine from 'alpinejs';
+import { createSearchComponent } from '../utils/search-component.js';
 
 document.addEventListener('alpine:init', () => {
   Alpine.data('reportsComponent', () => ({
@@ -419,15 +420,7 @@ document.addEventListener('alpine:init', () => {
   }));
 
   // Search component for header
-  Alpine.data('searchComponent', () => ({
-    query: '',
-    results: [],
-    
-    search() {
-      console.log('Searching for:', this.query);
-      this.results = [];
-    }
-  }));
+  Alpine.data('searchComponent', createSearchComponent({ getResults: () => [] }));
 
   // Theme switch component
   Alpine.data('themeSwitch', () => ({

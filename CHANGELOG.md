@@ -5,6 +5,101 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.1] - 2026-04-28
+
+### Fixed
+
+- **Search shortcut now Mac-aware** — placeholders said `Ctrl+K` on every page; the keydown handler already accepted both `Ctrl` and `Cmd`, but Mac users naturally tried `⌘K` (which the placeholder didn't advertise) and assumed it was broken. Placeholders are now rewritten to `⌘K` at runtime on macOS, and the handler also matches `event.code === 'KeyK'` (layout-independent) while explicitly excluding `Alt`/`Shift` so combinations like Cmd+Shift+K (DevTools console) don't accidentally trigger search focus.
+
+---
+
+## [3.4.0] - 2026-04-28
+
+### Hardening Pass — Security, Accessibility, Performance & Maintenance
+
+A wide-ranging audit-driven release that tightens the template across security, accessibility, performance, and code quality. No public-API or markup-structure breaks; existing pages keep working as-is.
+
+### 📦 Dependency Updates
+
+Major upgrades across the build toolchain, plus two runtime dependencies removed.
+
+- **Vite** 7.3.1 → **8.0.10** (major) — switched to the new rolldown-based bundler; `manualChunks` updated to function form
+- **@vitejs/plugin-legacy** 7.2.1 → **8.0.1** (major)
+- **ESLint** 9.39.2 → **10.2.1** (major)
+- **@eslint/js** 9.39.2 → **10.0.1** (major)
+- **globals** 16.2.0 → **17.5.0** (major)
+- **Lucide** 0.469.0 → **1.11.0** (major) — packaging bug from the prior rollback is fixed upstream
+- **Alpine.js** 3.15.4 → **3.15.11**
+- **ApexCharts** 5.3.6 → **5.10.6**
+- **SweetAlert2** 11.26.17 → **11.26.24**
+- **dayjs** 1.11.19 → **1.11.20**
+- **Sass** 1.97.3 → **1.99.0**
+- **PostCSS** 8.5.6 → **8.5.12**
+- **Autoprefixer** 10.4.23 → **10.5.0**
+- **Prettier** 3.8.1 → **3.8.3**
+- **rimraf** 6.1.2 → **6.1.3**
+- **Removed `chart.js`** — dashboard migrated to ApexCharts; one chart library is enough (saved ~63 KB gzip in `vendor-charts`)
+- **Removed `@fortawesome/fontawesome-free`** — never imported in source; Bootstrap Icons is the only icon font in use
+
+### 🔒 Security
+
+- **Replaced unsafe `innerHTML` interpolation** in `notifications.js` (toast renderer + activity feed) and `dashboard.js` (recent-orders table) with `createElement` + `textContent`. The dangerous `onclick="${config.action.handler}"` pattern is gone — toast actions must now be passed as functions.
+- **Replaced inline `onclick` attributes** in `elements-tables.html` with `data-*` attributes + delegated listeners; also fixed a pre-existing JS syntax error in that page's inline script.
+- **Added security meta tags** to all 21 HTML pages: `Referrer-Policy: strict-origin-when-cross-origin` and `X-Content-Type-Options: nosniff`.
+- **Whitelisted `localStorage` schema validation** in `security.js` and `settings.js` — corrupt or unexpected entries are removed instead of silently merged into component state.
+- **Added `autocomplete="new-password"`** to all password inputs in `forms.html` and `elements-forms.html`.
+- **Production bundles strip `console.*` and `debugger`** via `esbuild.drop` in `vite.config.js`.
+
+### ♿ Accessibility
+
+- **Skip-to-main-content link** injected on all 21 pages, paired with `id="main-content"` on every `<main>` element.
+- **Restored visible keyboard focus rings** — replaced `outline: none` (without replacement) in `_buttons.scss`, `_hamburger.scss`, `_products.scss`, and `_orders.scss` with `:focus-visible` rings using `var(--bs-primary)`.
+- **`prefers-reduced-motion` support** — new `_a11y.scss` partial that disables animations and transitions for users who opt out.
+- **Sidebar toggle ARIA** — `[data-sidebar-toggle]` now has `aria-controls="admin-sidebar"` and a dynamic `aria-expanded` that reflects sidebar state on both desktop and mobile.
+- **Sortable users table** — `<th>` elements got `role="button"`, `tabindex="0"`, keyboard handlers (Enter / Space), and dynamic `aria-sort` reflecting current sort.
+- **Heading hierarchy normalized** —
+  - Logo `<h1 class="h4">Metis</h1>` → `<span>` (it's branding, not a page heading) so each page has a single `<h1>`.
+  - Card titles `<h5 class="card-title">` → `<h2 class="h5 card-title">` across all pages (visual size preserved via Bootstrap typography classes).
+  - Stat-card values `<h3 x-text="stats.total">` → `<div class="h3" aria-live="polite"><span x-text=…>` (values aren't headings; `aria-live` so screen readers announce updates).
+  - Stat-card labels `<h6>` → `<h3 class="h6">` (semantic h3, visual h6).
+
+### 🐛 Bug Fixes
+
+- **Memory leaks from uncleared timers/listeners** —
+  - `dashboard.js`: rewrote with tracked `intervals`/`timeouts`/`cleanupFns` sets; `destroy()` clears them all.
+  - `analytics.js`: tracked interval + a single replaceable resize handler; `destroy()` runs on `pagehide`.
+  - `messages.js`: tracked simulated-activity intervals.
+  - `main.js`: wired `app.destroy()` to a one-shot `pagehide` listener so the cleanup runs on real navigations.
+- **Fixed missing dashboard charts** — `index.html` had three `<canvas>` containers left over from Chart.js; ApexCharts needs `<div>` containers and silently does nothing otherwise. Converted to `<div>` with appropriate `min-height`.
+- **`bi-crown` mapping in `icon-manager.js`** pointed at a non-existent icon; remapped to `bi-award`.
+- **Pre-existing inline-script syntax error** in `elements-tables.html` (orphaned `}` and `});` from a previous removal) cleaned up as part of the inline-onclick refactor.
+
+### ⚡ Performance
+
+- **CSS bundle: 499 KB → 399 KB raw (-100 KB / -20%)** —
+  - Removed unused Bootstrap component partials from `main.scss`: `accordion`, `carousel`, `offcanvas`, `popover`, `placeholders` (audit confirmed zero markup usage).
+  - Generated `_bootstrap-icons-subset.scss` containing only the **158 icons** actually referenced in the project, replacing the full Bootstrap Icons CSS (was 2,078 rules).
+  - Added `~bootstrap-icons` Vite alias so the subset's `@font-face` resolves into `node_modules`.
+- **Vite build hardening** — added `target: 'es2020'`, `cssCodeSplit: true`, `cssMinify: 'lightningcss'`, explicit `minify: true`, `chunkSizeWarningLimit: 600`.
+- **Production console stripping** — `esbuild.drop: ['console', 'debugger']` removes ~16 of 17 `console.log`s from the built `main.js`.
+- **Vendor chunks** — dropped `Offcanvas` and `Popover` from the Bootstrap JS imports (zero usage in markup), reducing the `vendor-bootstrap` chunk slightly.
+
+### 🛠️ Code Quality
+
+- **Extracted `searchComponent` factory** — `utils/search-component.js` exports `createSearchComponent({ getResults, minLength, delayMs })`. Replaced 11 nearly-identical Alpine `searchComponent` definitions across `users.js`, `elements.js`, `calendar.js`, `files.js`, `help.js`, `messages.js`, `orders.js`, `products.js`, `reports.js`, `security.js`, and `settings.js`.
+- **Constants module** — new `utils/constants.js` hoists scattered timing values: `MOBILE_BREAKPOINT_PX`, `RESIZE_DEBOUNCE_MS`, `REALTIME_FAST_POLL_MS`, `REALTIME_DASHBOARD_POLL_MS`, `STAT_ANIMATION_DURATION_MS`, etc. Wired into `sidebar.js`, `dashboard.js`, `messages.js`, and `analytics.js`.
+- **Stricter ESLint** — added `eqeqeq: 'smart'`, `prefer-const`, `no-var`. Surfaced and fixed two latent issues (a `let` that should be `const`, a `==` comparison).
+- **Removed abandoned `complete-cleanup.sh`** dev script (had a hardcoded path to the maintainer's iCloud).
+- **Build artifacts no longer tracked** — uncommented `dist-modern/` (and `dist/`) in `.gitignore`; ran `git rm -r --cached dist-modern/` to untrack 51 stale build files. No more rebuild-churn diffs in PRs.
+
+### 📝 Notes
+
+- **0 vulnerabilities** — `npm audit` clean across all production and dev dependencies.
+- **Font file subsetting deferred** — `bootstrap-icons.woff2` (134 KB) and `.woff` (180 KB) still ship the full glyph set. Subsetting requires `pyftsubset` / `glyphhanger` and would shrink to ~15-20 KB. Open task for a follow-up release.
+- **Migration note for downstream consumers** — if you customized `dashboard.js` to use Chart.js, you'll need to switch to ApexCharts (see `DEVELOPMENT.md` "Charts" section). Toast `action` callbacks must now be functions, not strings.
+
+---
+
 ## [3.3.0] - 2026-01-26
 
 ### Responsive Layout Overhaul - Mobile & Sidebar Rework

@@ -1,4 +1,5 @@
 import Alpine from 'alpinejs';
+import { createSearchComponent } from '../utils/search-component.js';
 
 document.addEventListener('alpine:init', () => {
   Alpine.data('settingsComponent', () => ({
@@ -97,21 +98,25 @@ document.addEventListener('alpine:init', () => {
 
     // Settings Management
     loadSettings() {
-      // Load settings from localStorage if available
       const savedSettings = localStorage.getItem('appSettings');
-      if (savedSettings) {
-        try {
-          const parsed = JSON.parse(savedSettings);
-          // Only merge non-theme settings to avoid overriding current theme
-          // eslint-disable-next-line no-unused-vars
-          const { theme, ...otherSettings } = parsed;
-          this.settings = { ...this.settings, ...otherSettings };
-        } catch (error) {
-          console.warn('Failed to load saved settings:', error);
+      if (!savedSettings) return;
+      try {
+        const parsed = JSON.parse(savedSettings);
+        if (!parsed || typeof parsed !== 'object') throw new Error('not an object');
+        // Only merge keys that already exist on this.settings with matching primitive type.
+        // Skip 'theme' to preserve the value applied in init().
+        const merged = { ...this.settings };
+        for (const key of Object.keys(this.settings)) {
+          if (key === 'theme') continue;
+          if (key in parsed && typeof parsed[key] === typeof this.settings[key]) {
+            merged[key] = parsed[key];
+          }
         }
+        this.settings = merged;
+      } catch (error) {
+        console.warn('Failed to load saved settings:', error);
+        localStorage.removeItem('appSettings');
       }
-      
-      // Don't change the theme here - it should remain as set in init()
     },
 
     saveSettings() {
@@ -309,15 +314,7 @@ document.addEventListener('alpine:init', () => {
   }));
 
   // Search component for header
-  Alpine.data('searchComponent', () => ({
-    query: '',
-    results: [],
-    
-    search() {
-      console.log('Searching for:', this.query);
-      this.results = [];
-    }
-  }));
+  Alpine.data('searchComponent', createSearchComponent({ getResults: () => [] }));
 
   // Theme switch component
   Alpine.data('themeSwitch', () => ({

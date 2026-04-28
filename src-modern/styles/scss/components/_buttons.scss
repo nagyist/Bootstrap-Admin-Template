@@ -293,9 +293,11 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
   }
   
-  &:focus,
-  &.focus {
-    outline: none;
+  // Bootstrap's box-shadow ring is the visible focus indicator on mouse focus.
+  // For keyboard focus, ensure a strong visible outline.
+  &:focus-visible {
+    outline: 2px solid var(--bs-primary);
+    outline-offset: 2px;
   }
   
   // Icon spacing

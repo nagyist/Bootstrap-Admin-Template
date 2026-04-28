@@ -1,5 +1,6 @@
 import Alpine from 'alpinejs';
 import ApexCharts from 'apexcharts';
+import { createSearchComponent } from '../utils/search-component.js';
 
 document.addEventListener('alpine:init', () => {
   Alpine.data('userTable', () => ({
@@ -616,42 +617,24 @@ document.addEventListener('alpine:init', () => {
   }));
 
   // Search Component for header search
-  Alpine.data('searchComponent', () => ({
-    query: '',
-    results: [],
-    isLoading: false,
-    
-    async search() {
-      if (this.query.length < 2) {
-        this.results = [];
-        return;
+  Alpine.data('searchComponent', createSearchComponent({
+    delayMs: 300,
+    getResults(query) {
+      const userTable = Alpine.$data(document.querySelector('[x-data="userTable"]'));
+      if (userTable) {
+        userTable.searchQuery = query;
+        userTable.filterUsers();
       }
-      
-      this.isLoading = true;
-      
-      // Simulate API search
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
-      this.results = [
+      const q = query.toLowerCase();
+      return [
         { title: 'Dashboard', url: '/', type: 'page' },
         { title: 'Users', url: '/users.html', type: 'page' },
         { title: 'Settings', url: '/settings.html', type: 'page' },
         { title: 'Analytics', url: '/analytics.html', type: 'page' },
         { title: 'Security', url: '/security.html', type: 'page' },
-        { title: 'Help', url: '/help.html', type: 'page' }
-      ].filter(item => 
-        item.title.toLowerCase().includes(this.query.toLowerCase())
-      );
-      
-      // Also filter the user table if it exists on this page
-      const userTable = Alpine.$data(document.querySelector('[x-data="userTable"]'));
-      if (userTable) {
-        userTable.searchQuery = this.query;
-        userTable.filterUsers();
-      }
-      
-      this.isLoading = false;
-    }
+        { title: 'Help', url: '/help.html', type: 'page' },
+      ].filter((item) => item.title.toLowerCase().includes(q));
+    },
   }));
 
   // Theme Switch Component

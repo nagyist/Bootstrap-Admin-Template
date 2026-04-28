@@ -18,8 +18,8 @@
 @import "~bootstrap/scss/mixins";
 @import "~bootstrap/scss/utilities";
 
-// 4. Include Bootstrap Icons
-@import "bootstrap-icons/font/bootstrap-icons.css";
+// 4. Include Bootstrap Icons (subset — only the 158 icons used in this project)
+@import "components/bootstrap-icons-subset";
 
 // 5. Include Bootstrap components (selective import for better performance)
 @import "~bootstrap/scss/root";
@@ -37,7 +37,6 @@
 @import "~bootstrap/scss/nav";
 @import "~bootstrap/scss/navbar";
 @import "~bootstrap/scss/card";
-@import "~bootstrap/scss/accordion";
 @import "~bootstrap/scss/breadcrumb";
 @import "~bootstrap/scss/pagination";
 @import "~bootstrap/scss/badge";
@@ -48,11 +47,7 @@
 @import "~bootstrap/scss/toasts";
 @import "~bootstrap/scss/modal";
 @import "~bootstrap/scss/tooltip";
-@import "~bootstrap/scss/popover";
-@import "~bootstrap/scss/carousel";
 @import "~bootstrap/scss/spinners";
-@import "~bootstrap/scss/offcanvas";
-@import "~bootstrap/scss/placeholders";
 
 // 6. Include Bootstrap helpers and utilities API
 @import "~bootstrap/scss/helpers";
@@ -64,6 +59,7 @@
 @import "layout/main";
 @import "layout/footer";
 
+@import "components/a11y";
 @import "components/cards";
 @import "components/buttons";
 @import "components/forms";

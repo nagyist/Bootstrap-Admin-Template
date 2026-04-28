@@ -480,13 +480,24 @@ export default defineConfig({
   build: {
     outDir: '../dist-modern',
 
-    // Chunk splitting (already configured)
+    // Chunk splitting (already configured) — Vite 8 / rolldown requires the
+    // function form. Each branch returns the chunk name an `id` belongs to.
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vendor-bootstrap': ['bootstrap', '@popperjs/core'],
-          'vendor-charts': ['chart.js', 'apexcharts'],
-          'vendor-ui': ['alpinejs', 'sweetalert2', 'dayjs'],
+        manualChunks(id) {
+          if (id.includes('node_modules/bootstrap/') || id.includes('node_modules/@popperjs/core/')) {
+            return 'vendor-bootstrap';
+          }
+          if (id.includes('node_modules/apexcharts/')) {
+            return 'vendor-charts';
+          }
+          if (
+            id.includes('node_modules/alpinejs/') ||
+            id.includes('node_modules/sweetalert2/') ||
+            id.includes('node_modules/dayjs/')
+          ) {
+            return 'vendor-ui';
+          }
         }
       }
     }

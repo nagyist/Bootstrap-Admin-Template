@@ -59,7 +59,7 @@ export class BootstrapIconManager {
     this.icons.set('unlock', 'bi-unlock');
     this.icons.set('user', 'bi-person');
     this.icons.set('team', 'bi-people');
-    this.icons.set('crown', 'bi-crown');
+    this.icons.set('crown', 'bi-award');
     this.icons.set('shield', 'bi-shield-check');
   }
 

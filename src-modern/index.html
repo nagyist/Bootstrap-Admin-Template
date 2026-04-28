@@ -4,6 +4,8 @@
     <!-- Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="description" content="Modern Bootstrap 5 Admin Template - Clean, responsive dashboard">
     <meta name="keywords" content="bootstrap, admin, dashboard, template, modern, responsive">
     <meta name="author" content="Bootstrap Admin Template">
@@ -35,6 +37,7 @@
 </head>
 
 <body data-page="dashboard" class="admin-layout">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <!-- Loading Screen -->
     <div id="loading-screen" class="loading-screen">
         <div class="loading-spinner">
@@ -54,7 +57,7 @@
                     <!-- Logo/Brand - Now first on the left -->
                     <a class="navbar-brand d-flex align-items-center" href="./index.html">
                         <img src="/assets/images/logo.svg" alt="Logo" height="32" class="d-inline-block align-text-top me-2">
-                        <h1 class="h4 mb-0 fw-bold text-primary">Metis</h1>
+                        <span class="h4 mb-0 fw-bold text-primary">Metis</span>
                     </a>
 
                     <!-- Sidebar Toggle -->
@@ -328,7 +331,7 @@
         <!-- Sidebar Backdrop (mobile overlay) -->
         <div class="sidebar-backdrop" aria-hidden="true"></div>
         <!-- Main Content -->
-        <main class="admin-main">
+        <main id="main-content" class="admin-main">
             <div class="container-fluid p-4 p-lg-5">
                 <!-- Page Header -->
                 <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 mb-4">
@@ -371,8 +374,8 @@
                                         </div>
                                     </div>
                                     <div class="flex-grow-1 ms-3">
-                                        <h6 class="mb-0 text-muted">Total Users</h6>
-                                        <h3 class="mb-0" x-text="value.toLocaleString()" data-stat-value>12,426</h3>
+                                        <h3 class="h6 mb-0 text-muted">Total Users</h3>
+                                        <div class="h3 mb-0" aria-live="polite" data-stat-value><span x-text="value.toLocaleString()">12,426</span></div>
                                         <small class="text-success">
                                             <i class="bi bi-arrow-up"></i> +12.5%
                                         </small>
@@ -392,7 +395,7 @@
                                         </div>
                                     </div>
                                     <div class="flex-grow-1 ms-3">
-                                        <h6 class="mb-0 text-muted">Revenue</h6>
+                                        <h3 class="h6 mb-0 text-muted">Revenue</h3>
                                         <h3 class="mb-0">$54,320</h3>
                                         <small class="text-success">
                                             <i class="bi bi-arrow-up"></i> +8.2%
@@ -413,7 +416,7 @@
                                         </div>
                                     </div>
                                     <div class="flex-grow-1 ms-3">
-                                        <h6 class="mb-0 text-muted">Orders</h6>
+                                        <h3 class="h6 mb-0 text-muted">Orders</h3>
                                         <h3 class="mb-0">1,852</h3>
                                         <small class="text-danger">
                                             <i class="bi bi-arrow-down"></i> -2.1%
@@ -434,7 +437,7 @@
                                         </div>
                                     </div>
                                     <div class="flex-grow-1 ms-3">
-                                        <h6 class="mb-0 text-muted">Avg. Response</h6>
+                                        <h3 class="h6 mb-0 text-muted">Avg. Response</h3>
                                         <h3 class="mb-0">2.3s</h3>
                                         <small class="text-success">
                                             <i class="bi bi-arrow-up"></i> +5.4%
@@ -451,7 +454,7 @@
                     <div class="col-lg-8">
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center">
-                                <h5 class="card-title mb-0">Revenue Overview</h5>
+                                <h2 class="h5 card-title mb-0">Revenue Overview</h2>
                                 <div class="btn-group btn-group-sm" role="group">
                                     <button type="button" class="btn btn-outline-primary active" data-chart-period="7d">7D</button>
                                     <button type="button" class="btn btn-outline-primary" data-chart-period="30d">30D</button>
@@ -460,7 +463,7 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <canvas id="revenueChart" height="250"></canvas>
+                                <div id="revenueChart" style="min-height: 320px;"></div>
                             </div>
                         </div>
                     </div>
@@ -468,7 +471,7 @@
                     <div class="col-lg-4">
                         <div class="card">
                             <div class="card-header">
-                                <h5 class="card-title mb-0">Recent Activity</h5>
+                                <h2 class="h5 card-title mb-0">Recent Activity</h2>
                             </div>
                             <div class="card-body">
                                 <div class="activity-feed">
@@ -510,10 +513,10 @@
                     <div class="col-lg-6">
                         <div class="card">
                             <div class="card-header">
-                                <h5 class="card-title mb-0">User Growth (Last 7 Days)</h5>
+                                <h2 class="h5 card-title mb-0">User Growth (Last 7 Days)</h2>
                             </div>
                             <div class="card-body">
-                                <canvas id="userGrowthChart" height="200"></canvas>
+                                <div id="userGrowthChart" style="min-height: 280px;"></div>
                             </div>
                         </div>
                     </div>
@@ -521,10 +524,10 @@
                     <div class="col-lg-6">
                         <div class="card">
                             <div class="card-header">
-                                <h5 class="card-title mb-0">Order Status Distribution</h5>
+                                <h2 class="h5 card-title mb-0">Order Status Distribution</h2>
                             </div>
                             <div class="card-body">
-                                <canvas id="orderStatusChart" height="200"></canvas>
+                                <div id="orderStatusChart" style="min-height: 280px;"></div>
                             </div>
                         </div>
                     </div>
@@ -536,7 +539,7 @@
                     <div class="col-lg-8">
                         <div class="card">
                             <div class="card-header">
-                                <h5 class="card-title mb-0">Recent Orders</h5>
+                                <h2 class="h5 card-title mb-0">Recent Orders</h2>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -563,7 +566,7 @@
                     <div class="col-lg-4">
                         <div class="card">
                             <div class="card-header">
-                                <h5 class="card-title mb-0">Storage Status</h5>
+                                <h2 class="h5 card-title mb-0">Storage Status</h2>
                             </div>
                             <div class="card-body">
                                 <div id="storageStatusChart"></div>
@@ -577,7 +580,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h5 class="card-title mb-0">Sales by Location</h5>
+                                <h2 class="h5 card-title mb-0">Sales by Location</h2>
                             </div>
                             <div class="card-body">
                                 <div id="salesByLocationChart" style="min-height: 400px; width: 100%;"></div>

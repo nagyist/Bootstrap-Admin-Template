@@ -1,4 +1,5 @@
 import Alpine from 'alpinejs';
+import { createSearchComponent } from '../utils/search-component.js';
 
 document.addEventListener('alpine:init', () => {
   Alpine.data('securityComponent', () => ({
@@ -404,17 +405,34 @@ document.addEventListener('alpine:init', () => {
     // Settings Management
     loadSecuritySettings() {
       const saved = localStorage.getItem('securitySettings');
-      if (saved) {
-        try {
-          const settings = JSON.parse(saved);
-          this.auth = { ...this.auth, ...settings.auth };
-          this.notifications = { ...this.notifications, ...settings.notifications };
-          this.permissions = { ...this.permissions, ...settings.permissions };
-        } catch (error) {
-          console.warn('Failed to load security settings:', error);
-        }
+      if (!saved) {
+        this.recalculateSecurityScore();
+        return;
+      }
+      try {
+        const parsed = JSON.parse(saved);
+        if (!parsed || typeof parsed !== 'object') throw new Error('not an object');
+
+        // Whitelist: only merge keys that already exist on the target with matching primitive types
+        this.auth = this._mergeKnownKeys(this.auth, parsed.auth);
+        this.notifications = this._mergeKnownKeys(this.notifications, parsed.notifications);
+        this.permissions = this._mergeKnownKeys(this.permissions, parsed.permissions);
+      } catch (error) {
+        console.warn('Failed to load security settings:', error);
+        localStorage.removeItem('securitySettings');
       }
       this.recalculateSecurityScore();
+    },
+
+    _mergeKnownKeys(target, incoming) {
+      if (!incoming || typeof incoming !== 'object') return target;
+      const result = { ...target };
+      for (const key of Object.keys(target)) {
+        if (key in incoming && typeof incoming[key] === typeof target[key]) {
+          result[key] = incoming[key];
+        }
+      }
+      return result;
     },
     
     saveSecuritySettings() {
@@ -444,17 +462,7 @@ document.addEventListener('alpine:init', () => {
   }));
 
   // Also register search and theme components for this page
-  Alpine.data('searchComponent', () => ({
-    query: '',
-    results: [],
-    
-    search() {
-      if (this.query.trim()) {
-        console.log('Searching for:', this.query);
-        this.results = [];
-      }
-    }
-  }));
+  Alpine.data('searchComponent', createSearchComponent({ getResults: () => [] }));
 
   Alpine.data('themeSwitch', () => ({
     currentTheme: 'light',

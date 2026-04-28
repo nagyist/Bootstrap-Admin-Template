@@ -1,4 +1,5 @@
 import Alpine from 'alpinejs';
+import { createSearchComponent } from '../utils/search-component.js';
 
 document.addEventListener('alpine:init', () => {
   Alpine.data('helpComponent', () => ({
@@ -496,34 +497,22 @@ document.addEventListener('alpine:init', () => {
   }));
 
   // Also register search and theme components for this page
-  Alpine.data('searchComponent', () => ({
-    query: '',
-    results: [],
-    
-    search() {
-      console.log('Searching help articles for:', this.query);
-      // Clear results or populate with search results
-      if (this.query.length > 2) {
-        // Mock search results for help content
-        this.results = [
-          { title: 'Getting Started Guide', url: '#getting-started', type: 'Help' },
-          { title: 'FAQ Section', url: '#faq', type: 'Help' },
-          { title: 'Documentation', url: '#documentation', type: 'Help' },
-          { title: 'Contact Support', url: '#contact', type: 'Help' }
-        ].filter(item => 
-          item.title.toLowerCase().includes(this.query.toLowerCase())
-        );
-        
-        // Also search FAQ if on FAQ section
-        const helpComponent = Alpine.$data(document.querySelector('[x-data="helpComponent"]'));
-        if (helpComponent && helpComponent.activeSection === 'faq') {
-          helpComponent.faqSearch = this.query;
-          helpComponent.filterFAQ();
-        }
-      } else {
-        this.results = [];
+  Alpine.data('searchComponent', createSearchComponent({
+    minLength: 3,
+    getResults(query) {
+      const helpComponent = Alpine.$data(document.querySelector('[x-data="helpComponent"]'));
+      if (helpComponent && helpComponent.activeSection === 'faq') {
+        helpComponent.faqSearch = query;
+        helpComponent.filterFAQ();
       }
-    }
+      const q = query.toLowerCase();
+      return [
+        { title: 'Getting Started Guide', url: '#getting-started', type: 'Help' },
+        { title: 'FAQ Section', url: '#faq', type: 'Help' },
+        { title: 'Documentation', url: '#documentation', type: 'Help' },
+        { title: 'Contact Support', url: '#contact', type: 'Help' },
+      ].filter((item) => item.title.toLowerCase().includes(q));
+    },
   }));
 
   Alpine.data('themeSwitch', () => ({

@@ -2,42 +2,20 @@
 // Dashboard Manager - Advanced data visualization and components
 // ==========================================================================
 
-import {
-  Chart,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  LineController,
-  BarController,
-  DoughnutController,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement,
-} from 'chart.js';
 import ApexCharts from 'apexcharts';
-
-// Register Chart.js components and controllers
-Chart.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  LineController,
-  BarController,
-  DoughnutController,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement
-);
+import {
+  REALTIME_DASHBOARD_POLL_MS,
+  CHART_RESIZE_DEBOUNCE_MS,
+  STAT_ANIMATION_DURATION_MS,
+  STAT_ANIMATION_STEPS,
+} from '../utils/constants.js';
 
 export class DashboardManager {
   constructor() {
     this.charts = new Map();
+    this.intervals = new Set();
+    this.timeouts = new Set();
+    this.cleanupFns = [];
     this.data = {
       revenue: [],
       users: [],
@@ -50,28 +28,20 @@ export class DashboardManager {
   }
 
   async init() {
-    console.log('🚀 Advanced Dashboard Manager initialized');
-    
-    // Load sample data
     await this.loadDashboardData();
-    
-    // Initialize charts
+
     this.initRevenueChart();
     this.initUserGrowthChart();
     this.initOrderStatusChart();
     this.initStorageChart();
     this.initSalesByLocationChart();
     this.populateRecentOrders();
-    
-    // Initialize real-time updates
+
     this.startRealTimeUpdates();
-    
-    // Initialize interactive elements
     this.initInteractiveElements();
   }
 
   async loadDashboardData() {
-    // Simulate API call with realistic data
     this.data.revenue = this.generateRevenueData();
     this.data.users = this.generateUserData();
     this.data.orders = this.generateOrderData();
@@ -126,17 +96,17 @@ export class DashboardManager {
 
   generateSalesByLocation() {
     return [
-        { "name": "United States", "value": 2822},
-        { "name": "Canada", "value": 1432},
-        { "name": "United Kingdom", "value": 980},
-        { "name": "Australia", "value": 780},
-        { "name": "Germany", "value": 650},
-        { "name": "Brazil", "value": 450},
-        { "name": "India", "value": 1800},
-        { "name": "China", "value": 2100},
-        { "name": "Japan", "value": 850},
-        { "name": "Russia", "value": 550}
-    ]
+        { name: 'United States', value: 2822 },
+        { name: 'Canada', value: 1432 },
+        { name: 'United Kingdom', value: 980 },
+        { name: 'Australia', value: 780 },
+        { name: 'Germany', value: 650 },
+        { name: 'Brazil', value: 450 },
+        { name: 'India', value: 1800 },
+        { name: 'China', value: 2100 },
+        { name: 'Japan', value: 850 },
+        { name: 'Russia', value: 550 }
+    ];
   }
 
   generatePerformanceData() {
@@ -149,505 +119,330 @@ export class DashboardManager {
   }
 
   initRevenueChart() {
-    const ctx = document.getElementById('revenueChart');
-    if (!ctx) return;
+    const el = document.getElementById('revenueChart');
+    if (!el) return;
 
-    const chart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: this.data.revenue.map(item => item.month),
-        datasets: [
-          {
-            label: 'Revenue',
-            data: this.data.revenue.map(item => item.revenue),
-            borderColor: 'rgb(99, 102, 241)',
-            backgroundColor: 'rgba(99, 102, 241, 0.1)',
-            fill: true,
-            tension: 0.4,
-            pointBackgroundColor: 'rgb(99, 102, 241)',
-            pointBorderColor: '#fff',
-            pointBorderWidth: 2,
-            pointRadius: 6,
-            pointHoverRadius: 8
-          },
-          {
-            label: 'Profit',
-            data: this.data.revenue.map(item => item.profit),
-            borderColor: 'rgb(16, 185, 129)',
-            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-            fill: true,
-            tension: 0.4,
-            pointBackgroundColor: 'rgb(16, 185, 129)',
-            pointBorderColor: '#fff',
-            pointBorderWidth: 2,
-            pointRadius: 6,
-            pointHoverRadius: 8
-          }
-        ]
+    const options = {
+      chart: {
+        type: 'area',
+        height: 320,
+        toolbar: { show: false },
+        zoom: { enabled: false }
       },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        interaction: {
-          intersect: false,
-          mode: 'index'
-        },
-        plugins: {
-          legend: {
-            position: 'top',
-            labels: {
-              usePointStyle: true,
-              padding: 20
-            }
-          },
-          tooltip: {
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-            titleColor: '#fff',
-            bodyColor: '#fff',
-            borderColor: 'rgba(255, 255, 255, 0.1)',
-            borderWidth: 1,
-            cornerRadius: 8,
-            displayColors: true,
-            callbacks: {
-              label: function(context) {
-                return `${context.dataset.label}: $${context.parsed.y.toLocaleString()}`;
-              }
-            }
-          }
-        },
-        scales: {
-          x: {
-            grid: {
-              display: false
-            },
-            border: {
-              display: false
-            }
-          },
-          y: {
-            beginAtZero: true,
-            grid: {
-              color: 'rgba(0, 0, 0, 0.1)'
-            },
-            border: {
-              display: false
-            },
-            ticks: {
-              callback: function(value) {
-                return '$' + value.toLocaleString();
-              }
-            }
-          }
+      series: [
+        { name: 'Revenue', data: this.data.revenue.map(item => item.revenue) },
+        { name: 'Profit', data: this.data.revenue.map(item => item.profit) }
+      ],
+      xaxis: {
+        categories: this.data.revenue.map(item => item.month),
+        axisBorder: { show: false }
+      },
+      yaxis: {
+        labels: {
+          formatter: value => '$' + value.toLocaleString()
         }
-      }
-    });
+      },
+      colors: ['#6366f1', '#10b981'],
+      stroke: { curve: 'smooth', width: 2 },
+      fill: {
+        type: 'gradient',
+        gradient: { shadeIntensity: 1, opacityFrom: 0.3, opacityTo: 0.05 }
+      },
+      dataLabels: { enabled: false },
+      legend: { position: 'top' },
+      tooltip: {
+        y: { formatter: value => '$' + value.toLocaleString() }
+      },
+      grid: { borderColor: 'rgba(0,0,0,0.08)', strokeDashArray: 4 }
+    };
 
+    const chart = new ApexCharts(el, options);
+    chart.render();
     this.charts.set('revenue', chart);
   }
 
   initUserGrowthChart() {
-    const ctx = document.getElementById('userGrowthChart');
-    if (!ctx) return;
+    const el = document.getElementById('userGrowthChart');
+    if (!el) return;
 
-    const chart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: this.data.users.slice(-7).map(item => `Day ${item.day}`),
-        datasets: [
-          {
-            label: 'New Users',
-            data: this.data.users.slice(-7).map(item => item.newUsers),
-            backgroundColor: 'rgba(99, 102, 241, 0.8)',
-            borderColor: 'rgb(99, 102, 241)',
-            borderWidth: 1,
-            borderRadius: 6,
-            borderSkipped: false
-          }
-        ]
+    const recent = this.data.users.slice(-7);
+    const options = {
+      chart: { type: 'bar', height: 280, toolbar: { show: false } },
+      series: [{ name: 'New Users', data: recent.map(item => item.newUsers) }],
+      xaxis: {
+        categories: recent.map(item => `Day ${item.day}`),
+        axisBorder: { show: false }
       },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false
-          }
-        },
-        scales: {
-          x: {
-            grid: {
-              display: false
-            }
-          },
-          y: {
-            beginAtZero: true,
-            grid: {
-              color: 'rgba(0, 0, 0, 0.1)'
-            }
-          }
-        }
-      }
-    });
+      colors: ['#6366f1'],
+      plotOptions: { bar: { borderRadius: 6, columnWidth: '55%' } },
+      dataLabels: { enabled: false },
+      grid: { borderColor: 'rgba(0,0,0,0.08)', strokeDashArray: 4 }
+    };
 
+    const chart = new ApexCharts(el, options);
+    chart.render();
     this.charts.set('userGrowth', chart);
   }
 
   initOrderStatusChart() {
-    const ctx = document.getElementById('orderStatusChart');
-    if (!ctx) return;
+    const el = document.getElementById('orderStatusChart');
+    if (!el) return;
 
-    const chart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['Completed', 'Processing', 'Pending', 'Cancelled'],
-        datasets: [{
-          data: [
-            this.data.orders.completed,
-            this.data.orders.processing,
-            this.data.orders.pending,
-            this.data.orders.cancelled
-          ],
-          backgroundColor: [
-            'rgba(16, 185, 129, 0.8)',
-            'rgba(99, 102, 241, 0.8)',
-            'rgba(245, 158, 11, 0.8)',
-            'rgba(239, 68, 68, 0.8)'
-          ],
-          borderWidth: 0,
-          cutout: '60%'
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: 'bottom',
-            labels: {
-              padding: 20,
-              usePointStyle: true
-            }
-          }
-        }
-      }
-    });
+    const options = {
+      chart: { type: 'donut', height: 280 },
+      series: [
+        this.data.orders.completed,
+        this.data.orders.processing,
+        this.data.orders.pending,
+        this.data.orders.cancelled
+      ],
+      labels: ['Completed', 'Processing', 'Pending', 'Cancelled'],
+      colors: ['#10b981', '#6366f1', '#f59e0b', '#ef4444'],
+      legend: { position: 'bottom' },
+      dataLabels: { enabled: false },
+      plotOptions: { pie: { donut: { size: '60%' } } }
+    };
 
+    const chart = new ApexCharts(el, options);
+    chart.render();
     this.charts.set('orderStatus', chart);
   }
 
   initStorageChart() {
+    const el = document.querySelector('#storageStatusChart');
+    if (!el) return;
+
     const options = {
-      chart: {
-        height: 280,
-        type: "radialBar",
-      },
+      chart: { height: 280, type: 'radialBar' },
       series: [76],
-      colors: ["#20E647"],
+      colors: ['#20E647'],
       plotOptions: {
         radialBar: {
-          hollow: {
-            margin: 0,
-            size: "70%",
-            background: "#293450"
-          },
-          track: {
-            dropShadow: {
-              enabled: true,
-              top: 2,
-              left: 0,
-              blur: 4,
-              opacity: 0.15
-            }
-          },
+          hollow: { margin: 0, size: '70%', background: '#293450' },
+          track: { dropShadow: { enabled: true, top: 2, left: 0, blur: 4, opacity: 0.15 } },
           dataLabels: {
-            name: {
-              offsetY: -10,
-              color: "#fff",
-              fontSize: "13px"
-            },
-            value: {
-              color: "#fff",
-              fontSize: "30px",
-              show: true
-            }
+            name: { offsetY: -10, color: '#fff', fontSize: '13px' },
+            value: { color: '#fff', fontSize: '30px', show: true }
           }
         }
       },
       fill: {
-        type: "gradient",
-        gradient: {
-          shade: "dark",
-          type: "vertical",
-          gradientToColors: ["#87D4F9"],
-          stops: [0, 100]
-        }
+        type: 'gradient',
+        gradient: { shade: 'dark', type: 'vertical', gradientToColors: ['#87D4F9'], stops: [0, 100] }
       },
-      stroke: {
-        lineCap: "round"
-      },
-      labels: ["Used Space"]
+      stroke: { lineCap: 'round' },
+      labels: ['Used Space']
     };
 
-    const chart = new ApexCharts(document.querySelector("#storageStatusChart"), options);
+    const chart = new ApexCharts(el, options);
     chart.render();
     this.charts.set('storage', chart);
   }
 
   initSalesByLocationChart() {
-      const chartElement = document.querySelector("#salesByLocationChart");
-      if (!chartElement) return;
+    const chartElement = document.querySelector('#salesByLocationChart');
+    if (!chartElement) return;
 
-      const options = {
-          series: [{
-              name: 'Sales',
-              data: this.data.salesByLocation.map(c => ({ x: c.name, y: c.value }))
-          }],
-          chart: {
-              type: 'treemap',
-              height: 350,
-              width: '100%',
-              toolbar: {
-                  show: true,
-                  tools: {
-                      download: true,
-                      selection: false,
-                      zoom: false,
-                      zoomin: false,
-                      zoomout: false,
-                      pan: false,
-                      reset: false
-                  }
-              },
-              events: {
-                  mounted: (chart) => {
-                      chart.windowResizeHandler();
-                  }
-              }
-          },
-          dataLabels: {
-              enabled: true,
-              style: {
-                  fontSize: '12px',
-              },
-              formatter: function(text, op) {
-                  return [text, op.value]
-              },
-              offsetY: -4
-          },
-          plotOptions: {
-              treemap: {
-                  enableShades: true,
-                  shadeIntensity: 0.5,
-                  reverseNegativeShade: true,
-                  colorScale: {
-                      ranges: [
-                          { from: 0, to: 1000, color: '#CDD7B6' },
-                          { from: 1001, to: 2000, color: '#A4B494' },
-                          { from: 2001, to: 3000, color: '#52708E' }
-                      ]
-                  }
-              }
-          },
-          responsive: [{
-              breakpoint: 1200,
-              options: {
-                  chart: {
-                      height: 350
-                  },
-                  dataLabels: {
-                      style: {
-                          fontSize: '11px'
-                      }
-                  }
-              }
-          }, {
-              breakpoint: 768,
-              options: {
-                  chart: {
-                      height: 300
-                  },
-                  dataLabels: {
-                      style: {
-                          fontSize: '10px'
-                      }
-                  }
-              }
-          }]
-      };
-
-      const chart = new ApexCharts(chartElement, options);
-      chart.render();
-      this.charts.set('salesByLocation', chart);
-
-      // Force resize on window resize for better responsiveness
-      window.addEventListener('resize', () => {
-          if (this.charts.has('salesByLocation')) {
-              setTimeout(() => {
-                  chart.updateOptions({
-                      chart: {
-                          width: '100%'
-                      }
-                  }, false, true);
-              }, 100);
+    const options = {
+      series: [{
+        name: 'Sales',
+        data: this.data.salesByLocation.map(c => ({ x: c.name, y: c.value }))
+      }],
+      chart: {
+        type: 'treemap',
+        height: 350,
+        width: '100%',
+        toolbar: {
+          show: true,
+          tools: { download: true, selection: false, zoom: false, zoomin: false, zoomout: false, pan: false, reset: false }
+        },
+        events: {
+          mounted: (chart) => { chart.windowResizeHandler(); }
+        }
+      },
+      dataLabels: {
+        enabled: true,
+        style: { fontSize: '12px' },
+        formatter: (text, op) => [text, op.value],
+        offsetY: -4
+      },
+      plotOptions: {
+        treemap: {
+          enableShades: true,
+          shadeIntensity: 0.5,
+          reverseNegativeShade: true,
+          colorScale: {
+            ranges: [
+              { from: 0, to: 1000, color: '#CDD7B6' },
+              { from: 1001, to: 2000, color: '#A4B494' },
+              { from: 2001, to: 3000, color: '#52708E' }
+            ]
           }
-      });
+        }
+      },
+      responsive: [
+        { breakpoint: 1200, options: { chart: { height: 350 }, dataLabels: { style: { fontSize: '11px' } } } },
+        { breakpoint: 768, options: { chart: { height: 300 }, dataLabels: { style: { fontSize: '10px' } } } }
+      ]
+    };
+
+    const chart = new ApexCharts(chartElement, options);
+    chart.render();
+    this.charts.set('salesByLocation', chart);
+
+    const onResize = () => {
+      if (!this.charts.has('salesByLocation')) return;
+      const t = setTimeout(() => {
+        chart.updateOptions({ chart: { width: '100%' } }, false, true);
+        this.timeouts.delete(t);
+      }, CHART_RESIZE_DEBOUNCE_MS);
+      this.timeouts.add(t);
+    };
+    window.addEventListener('resize', onResize);
+    this.cleanupFns.push(() => window.removeEventListener('resize', onResize));
   }
 
   populateRecentOrders() {
-      const tableBody = document.getElementById('recent-orders-table');
-      if (!tableBody) return;
+    const tableBody = document.getElementById('recent-orders-table');
+    if (!tableBody) return;
 
-      tableBody.innerHTML = this.data.recentOrders.map(order => `
-          <tr>
-              <td><strong>${order.id}</strong></td>
-              <td>${order.customer}</td>
-              <td>${order.amount}</td>
-              <td><span class="badge ${order.status.class}">${order.status.text}</span></td>
-              <td>${order.date}</td>
-          </tr>
-      `).join('');
+    tableBody.replaceChildren();
+    for (const order of this.data.recentOrders) {
+      const tr = document.createElement('tr');
+
+      const idCell = document.createElement('td');
+      const strong = document.createElement('strong');
+      strong.textContent = order.id;
+      idCell.appendChild(strong);
+
+      const customerCell = document.createElement('td');
+      customerCell.textContent = order.customer;
+
+      const amountCell = document.createElement('td');
+      amountCell.textContent = order.amount;
+
+      const statusCell = document.createElement('td');
+      const badge = document.createElement('span');
+      badge.className = `badge ${order.status.class}`;
+      badge.textContent = order.status.text;
+      statusCell.appendChild(badge);
+
+      const dateCell = document.createElement('td');
+      dateCell.textContent = order.date;
+
+      tr.append(idCell, customerCell, amountCell, statusCell, dateCell);
+      tableBody.appendChild(tr);
+    }
   }
 
   startRealTimeUpdates() {
-    // Update charts every 30 seconds with new data
-    setInterval(() => {
-      this.updateChartsWithRealTimeData();
-    }, 30000);
+    const id = setInterval(() => this.updateChartsWithRealTimeData(), REALTIME_DASHBOARD_POLL_MS);
+    this.intervals.add(id);
   }
 
   updateChartsWithRealTimeData() {
-    // Update revenue chart
     const revenueChart = this.charts.get('revenue');
     if (revenueChart) {
       const newRevenue = Math.floor(Math.random() * 50000) + 10000;
       const newProfit = Math.floor(Math.random() * 20000) + 5000;
-      
-      revenueChart.data.datasets[0].data.push(newRevenue);
-      revenueChart.data.datasets[1].data.push(newProfit);
-      
-      if (revenueChart.data.datasets[0].data.length > 12) {
-        revenueChart.data.datasets[0].data.shift();
-        revenueChart.data.datasets[1].data.shift();
-        revenueChart.data.labels.shift();
-      }
-      
-      revenueChart.update('none');
+      this.data.revenue.push({ month: 'New', revenue: newRevenue, profit: newProfit });
+      if (this.data.revenue.length > 12) this.data.revenue.shift();
+
+      revenueChart.updateSeries([
+        { name: 'Revenue', data: this.data.revenue.map(item => item.revenue) },
+        { name: 'Profit', data: this.data.revenue.map(item => item.profit) }
+      ]);
     }
 
-    // Update stats cards
     this.updateStatsCards();
   }
 
   updateStatsCards() {
-    // Animate stats card values
     const statsElements = document.querySelectorAll('[data-stat-value]');
     statsElements.forEach(element => {
       const currentValue = parseInt(element.textContent.replace(/[^0-9]/g, ''));
       const newValue = currentValue + Math.floor(Math.random() * 10) - 5;
-      
-      if (newValue > 0) {
-        this.animateNumber(element, currentValue, newValue);
-      }
+      if (newValue > 0) this.animateNumber(element, currentValue, newValue);
     });
   }
 
   animateNumber(element, start, end) {
-    const duration = 1000;
-    const steps = 30;
-    const stepValue = (end - start) / steps;
+    const stepValue = (end - start) / STAT_ANIMATION_STEPS;
     let current = start;
     let step = 0;
 
     const timer = setInterval(() => {
       current += stepValue;
       step++;
-      
+
       const formatted = Math.floor(current).toLocaleString();
       element.textContent = element.textContent.replace(/[\d,]+/, formatted);
-      
-      if (step >= steps) {
+
+      if (step >= STAT_ANIMATION_STEPS) {
         clearInterval(timer);
-        const finalFormatted = end.toLocaleString();
-        element.textContent = element.textContent.replace(/[\d,]+/, finalFormatted);
+        this.intervals.delete(timer);
+        element.textContent = element.textContent.replace(/[\d,]+/, end.toLocaleString());
       }
-    }, duration / steps);
+    }, STAT_ANIMATION_DURATION_MS / STAT_ANIMATION_STEPS);
+    this.intervals.add(timer);
   }
 
   initInteractiveElements() {
-    // Chart period switcher
-    document.addEventListener('click', (e) => {
+    const onPeriodClick = (e) => {
       if (e.target.matches('[data-chart-period]')) {
         const period = e.target.dataset.chartPeriod;
         this.updateChartPeriod(period);
-        
-        // Update active state
-        document.querySelectorAll('[data-chart-period]').forEach(btn => {
-          btn.classList.remove('active');
-        });
+        document.querySelectorAll('[data-chart-period]').forEach(btn => btn.classList.remove('active'));
         e.target.classList.add('active');
       }
-    });
-
-    // Export functionality
-    document.addEventListener('click', (e) => {
+    };
+    const onExportClick = (e) => {
       if (e.target.matches('[data-export-chart]')) {
         const chartName = e.target.dataset.exportChart;
         this.exportChart(chartName);
       }
-    });
+    };
+
+    document.addEventListener('click', onPeriodClick);
+    document.addEventListener('click', onExportClick);
+    this.cleanupFns.push(() => document.removeEventListener('click', onPeriodClick));
+    this.cleanupFns.push(() => document.removeEventListener('click', onExportClick));
   }
 
   updateChartPeriod(period) {
-    // Regenerate data based on period
     switch (period) {
-      case '7d':
-        this.loadWeeklyData();
-        break;
-      case '30d':
-        this.loadMonthlyData();
-        break;
-      case '90d':
-        this.loadQuarterlyData();
-        break;
-      case '1y':
-        this.loadYearlyData();
-        break;
+      case '7d': this.loadWeeklyData(); break;
+      case '30d': this.loadMonthlyData(); break;
+      case '90d': this.loadQuarterlyData(); break;
+      case '1y': this.loadYearlyData(); break;
     }
   }
 
-  loadWeeklyData() {
-    // Update charts with weekly data
-    console.log('Loading weekly data...');
-  }
-
-  loadMonthlyData() {
-    // Update charts with monthly data
-    console.log('Loading monthly data...');
-  }
-
-  loadQuarterlyData() {
-    // Update charts with quarterly data
-    console.log('Loading quarterly data...');
-  }
-
-  loadYearlyData() {
-    // Update charts with yearly data
-    console.log('Loading yearly data...');
-  }
+  loadWeeklyData() {}
+  loadMonthlyData() {}
+  loadQuarterlyData() {}
+  loadYearlyData() {}
 
   exportChart(chartName) {
     const chart = this.charts.get(chartName);
-    if (chart) {
-      const url = chart.toBase64Image();
-      const link = document.createElement('a');
-      link.download = `${chartName}-chart.png`;
-      link.href = url;
-      link.click();
+    if (chart && typeof chart.dataURI === 'function') {
+      chart.dataURI().then(({ imgURI }) => {
+        const link = document.createElement('a');
+        link.download = `${chartName}-chart.png`;
+        link.href = imgURI;
+        link.click();
+      });
     }
   }
 
   destroy() {
+    this.intervals.forEach(id => clearInterval(id));
+    this.intervals.clear();
+    this.timeouts.forEach(id => clearTimeout(id));
+    this.timeouts.clear();
+    this.cleanupFns.forEach(fn => fn());
+    this.cleanupFns = [];
     this.charts.forEach(chart => chart.destroy());
     this.charts.clear();
   }
-} 
+}

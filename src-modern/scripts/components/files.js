@@ -1,4 +1,5 @@
 import Alpine from 'alpinejs';
+import { createSearchComponent } from '../utils/search-component.js';
 
 document.addEventListener('alpine:init', () => {
   Alpine.data('filesComponent', () => ({
@@ -785,26 +786,16 @@ document.addEventListener('alpine:init', () => {
   }));
 
   // Search component for header
-  Alpine.data('searchComponent', () => ({
-    query: '',
-    results: [],
-    
-    search() {
-      console.log('Searching for:', this.query);
-      // Clear results or populate with search results
-      if (this.query.length > 2) {
-        // Mock search results for demo
-        this.results = [
-          { title: 'Calendar Events', url: '/calendar', type: 'Page' },
-          { title: 'File Manager', url: '/files', type: 'Page' },
-          { title: 'User Settings', url: '/settings', type: 'Page' }
-        ].filter(item => 
-          item.title.toLowerCase().includes(this.query.toLowerCase())
-        );
-      } else {
-        this.results = [];
-      }
-    }
+  Alpine.data('searchComponent', createSearchComponent({
+    minLength: 3,
+    getResults(query) {
+      const q = query.toLowerCase();
+      return [
+        { title: 'Calendar Events', url: '/calendar', type: 'Page' },
+        { title: 'File Manager', url: '/files', type: 'Page' },
+        { title: 'User Settings', url: '/settings', type: 'Page' },
+      ].filter((item) => item.title.toLowerCase().includes(q));
+    },
   }));
 
   // Theme switch component

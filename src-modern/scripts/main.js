@@ -8,8 +8,6 @@ import {
   Collapse,
   Dropdown,
   Modal,
-  Offcanvas,
-  Popover,
   Tab,
   Toast,
   Tooltip,
@@ -72,7 +70,10 @@ class AdminApp {
 
       // Setup global event listeners
       this.setupEventListeners();
-      
+
+      // Localize shortcut hints in search placeholders (⌘K on Mac, Ctrl+K elsewhere)
+      this.localizeShortcutHints();
+
       // Initialize navigation
       this.initNavigation();
 
@@ -105,11 +106,6 @@ class AdminApp {
       new Modal(element);
     });
 
-    // Initialize offcanvas
-    document.querySelectorAll('.offcanvas').forEach(element => {
-      new Offcanvas(element);
-    });
-
     // Initialize collapse elements
     document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(element => {
       new Collapse(element);
@@ -126,16 +122,10 @@ class AdminApp {
     });
   }
 
-  // Initialize tooltips and popovers
+  // Initialize tooltips
   initTooltipsAndPopovers() {
-    // Initialize tooltips
     document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(element => {
       new Tooltip(element);
-    });
-
-    // Initialize popovers
-    document.querySelectorAll('[data-bs-toggle="popover"]').forEach(element => {
-      new Popover(element);
     });
   }
 
@@ -337,15 +327,34 @@ class AdminApp {
 
   // Handle keyboard shortcuts
   handleKeyboardShortcuts(event) {
-    // Ctrl/Cmd + K for search
-    if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+    // Ctrl/Cmd + K for search. event.code is layout-independent (KeyK regardless
+    // of locale or modifier-shifted key value); event.key can vary by layout.
+    const isSearchShortcut =
+      (event.ctrlKey || event.metaKey) &&
+      !event.altKey &&
+      !event.shiftKey &&
+      (event.code === 'KeyK' || event.key === 'k' || event.key === 'K');
+
+    if (isSearchShortcut) {
       event.preventDefault();
-      // Open search modal or focus search input
       const searchInput = document.querySelector('[data-search-input]');
-      if (searchInput) {
-        searchInput.focus();
-      }
+      if (searchInput) searchInput.focus();
     }
+  }
+
+  // Replace the literal "Ctrl+K" placeholder hint with the platform-correct one.
+  // Mac users expect ⌘K, not Ctrl+K — and the keydown handler already accepts both.
+  localizeShortcutHints() {
+    const isMac = /Mac|iPhone|iPad|iPod/i.test(
+      (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || ''
+    );
+    if (!isMac) return; // Ctrl+K is already correct for Windows/Linux
+
+    document.querySelectorAll('[data-search-input]').forEach((el) => {
+      if (el.placeholder && el.placeholder.includes('Ctrl+K')) {
+        el.placeholder = el.placeholder.replace('Ctrl+K', '⌘K'); // ⌘K
+      }
+    });
   }
 
   // Toggle fullscreen
@@ -599,6 +608,9 @@ const app = new AdminApp();
 
 // Initialize app when module loads
 app.init();
+
+// Tear down on page hide so listeners/intervals don't leak across SPA-style nav
+window.addEventListener('pagehide', () => app.destroy(), { once: true });
 
 // Export for global access
 window.AdminApp = app;

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Modern Bootstrap 5 Admin Dashboard Template (v3.3.0) using Vite, Alpine.js, and SCSS.
+Modern Bootstrap 5 Admin Dashboard Template (v3.4.0) using Vite, Alpine.js, and SCSS.
 
 | Directory | Purpose |
 |-----------|---------|
@@ -28,7 +28,11 @@ npm run format   # Prettier format
 | `src-modern/scripts/main.js` | App entry point, initializes AdminApp class |
 | `src-modern/styles/scss/main.scss` | SCSS entry point |
 | `vite.config.js` | Build config with multi-page entries |
-| `eslint.config.js` | ESLint v9 flat config |
+| `eslint.config.js` | ESLint v10 flat config |
+| `src-modern/scripts/utils/search-component.js` | Factory for the navbar search Alpine component |
+| `src-modern/scripts/utils/constants.js` | Shared timing/breakpoint constants |
+| `src-modern/styles/scss/components/_a11y.scss` | Skip-link, reduced-motion, sr-only helpers |
+| `src-modern/styles/scss/components/_bootstrap-icons-subset.scss` | Generated icon CSS (only the ~158 used) |
 
 ## Architecture Quick Reference
 
@@ -61,11 +65,19 @@ Alpine.data('componentName', () => ({
 
 ## Dependencies
 
-- **UI**: Bootstrap 5.3.8, Bootstrap Icons 1.13.1
-- **Reactive**: Alpine.js 3.15.4
-- **Charts**: ApexCharts 5.3.6, Chart.js 4.5.1
-- **Notifications**: SweetAlert2 11.26.17
-- **Build**: Vite 7.3.1, Sass 1.97.3
+- **UI**: Bootstrap 5.3.8, Bootstrap Icons 1.13.1 (subset, see below)
+- **Reactive**: Alpine.js 3.15.11
+- **Charts**: ApexCharts 5.10.6 (single chart library — Chart.js was removed in v3.4.0)
+- **Notifications**: SweetAlert2 11.26.24
+- **Build**: Vite 8.0 (rolldown), Sass 1.99
+
+## Conventions
+
+- **One charting library.** Use ApexCharts. ApexCharts requires a `<div>` container — not `<canvas>`.
+- **No `innerHTML` with interpolation.** Use `createElement` + `textContent`. Toast `action` callbacks must be functions, not strings.
+- **Search inputs** use the shared factory: `Alpine.data('searchComponent', createSearchComponent({ getResults }))`. Don't paste fresh definitions per page.
+- **Component cleanup.** Anything that calls `setInterval` / `setTimeout` / `addEventListener` should track the IDs and clean up in `destroy()` (called via `pagehide`).
+- **Bootstrap Icons subset.** When adding an icon used in markup that wasn't in the subset, regenerate `_bootstrap-icons-subset.scss` (script in CHANGELOG 3.4.0 entry / see node script below) so the icon's `content: "\..."` rule exists.
 
 ## Documentation
 

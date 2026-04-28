@@ -465,22 +465,29 @@ const chart = new ApexCharts(document.querySelector('#chart'), options);
 chart.render();
 ```
 
-### Chart.js Integration
+### Bar Chart with ApexCharts
+
+The template ships **only ApexCharts** as of v3.4.0 — Chart.js was removed. Render a bar chart:
 
 ```javascript
-import Chart from 'chart.js/auto';
+import ApexCharts from 'apexcharts';
 
-const ctx = document.getElementById('myChart').getContext('2d');
-const myChart = new Chart(ctx, {
-  type: 'bar',
-  data: {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    datasets: [{
-      label: '# of Votes',
-      data: [12, 19, 3, 5, 2, 3]
-    }]
-  }
-});
+const options = {
+  chart: { type: 'bar', height: 280, toolbar: { show: false } },
+  series: [{ name: '# of Votes', data: [12, 19, 3, 5, 2, 3] }],
+  xaxis: { categories: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'] },
+  colors: ['#6366f1'],
+  plotOptions: { bar: { borderRadius: 6, columnWidth: '55%' } },
+  dataLabels: { enabled: false }
+};
+
+// IMPORTANT: ApexCharts mounts into a <div>, not <canvas>.
+//   <div id="myChart" style="min-height: 280px;"></div>
+const chart = new ApexCharts(document.querySelector('#myChart'), options);
+chart.render();
+
+// Always destroy charts when the host component unmounts to avoid leaks:
+//   chart.destroy();
 ```
 
 ---
@@ -491,7 +498,29 @@ const myChart = new Chart(ctx, {
 
 The template includes these Alpine.js components registered in `main.js`:
 
-**searchComponent** - Global search functionality:
+**searchComponent** - Global search functionality. As of v3.4.0, each page registers its own `searchComponent` via the shared factory rather than redefining the same shell. From a page component:
+
+```javascript
+import Alpine from 'alpinejs';
+import { createSearchComponent } from '../utils/search-component.js';
+
+document.addEventListener('alpine:init', () => {
+  Alpine.data('searchComponent', createSearchComponent({
+    minLength: 2,        // default
+    delayMs: 200,        // simulated debounce
+    getResults(query) {
+      const q = query.toLowerCase();
+      return [
+        { title: 'Dashboard', url: '/', type: 'page' },
+        // …
+      ].filter((item) => item.title.toLowerCase().includes(q));
+    },
+  }));
+});
+```
+
+Markup is unchanged:
+
 ```html
 <div x-data="searchComponent">
   <input type="search" x-model="query" @input="search()">
@@ -522,7 +551,7 @@ The template includes these Alpine.js components registered in `main.js`:
 
 ## Icon Usage
 
-### Bootstrap Icons (Primary)
+### Bootstrap Icons (Subset)
 
 ```html
 <!-- Inline icon -->
@@ -543,13 +572,17 @@ The template includes these Alpine.js components registered in `main.js`:
 <i class="bi bi-trash"></i>         <!-- Delete -->
 ```
 
-### Font Awesome (Optional)
+> **Note (v3.4.0):** The build ships a CSS subset of Bootstrap Icons containing only the ~158 icons actually referenced in the project, rather than all ~1,800. If you add an icon class that isn't in the subset, the icon won't render. Add the rule to `src-modern/styles/scss/components/_bootstrap-icons-subset.scss` or regenerate the file from `bootstrap-icons/font/bootstrap-icons.json`. The font file itself is still the full set, so glyphs are immediately available once a CSS rule is added.
 
-```html
-<i class="fa-solid fa-house"></i>
-<i class="fa-regular fa-bell"></i>
-<i class="fa-brands fa-github"></i>
+### Font Awesome
+
+Font Awesome was removed in v3.4.0 — it was declared but never actually imported. Bootstrap Icons covers everything in the demo. If you need Font Awesome:
+
+```bash
+npm install @fortawesome/fontawesome-free
 ```
+
+then `@import "@fortawesome/fontawesome-free/css/all.min.css";` in `main.scss`.
 
 ---
 

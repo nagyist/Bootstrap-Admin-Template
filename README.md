@@ -2,7 +2,7 @@
 
 > A completely modernized, powerful, and free Bootstrap 5 admin dashboard template built with cutting-edge web technologies.
 
-**🎉 Version 3.3.0 Release** - Complete mobile layout rework, sidebar toggle overhaul, and responsive improvements across all pages.
+**🎉 Version 3.4.0 Release** - Hardening pass: WCAG-leaning accessibility (skip-link, focus rings, ARIA, reduced motion), XSS-safe DOM rendering, leak-free chart components, Vite 8 + ESLint 10, and 100 KB lighter CSS via icon subsetting.
 
 ![Metis Bootstrap Admin Dashboard](./metis-bootstrap-admin-dashboard.png)
 
@@ -22,13 +22,12 @@
 - **Modern Typography** - Inter font family for enhanced readability
 
 ### 🚀 **Advanced Technology Stack**
-- **Alpine.js 3.15.4** - Lightweight reactive framework for modern interactions
+- **Alpine.js 3.15.11** - Lightweight reactive framework for modern interactions
 - **ES6+ JavaScript** - Modern JavaScript with modules and async/await
-- **Vite 7.3.1** - Lightning-fast development and optimized production builds
-- **SCSS Architecture** - Organized, scalable stylesheet structure with Sass 1.97.3
-- **Bootstrap Icons 1.13.1** - 1,800+ high-quality SVG icons
-- **ApexCharts 5.3.6** - Advanced charting library
-- **Font Awesome 7.1.0** - Additional icon library
+- **Vite 8.0** - Lightning-fast development and optimized production builds (rolldown-powered)
+- **SCSS Architecture** - Organized, scalable stylesheet structure with Sass 1.99
+- **Bootstrap Icons 1.13.1** - 1,800+ icons available; build ships only the ~158 actually used
+- **ApexCharts 5.10** - Single, modern charting library used everywhere
 
 ### 📊 **Comprehensive Dashboard Pages**
 - **📈 Analytics Dashboard** - Charts, KPIs, and data visualization
@@ -230,18 +229,18 @@ document.addEventListener('alpine:init', () => {
 });
 ```
 
-## 🆕 What's New in v3.3.0
+## 🆕 What's New in v3.4.0
 
-### Responsive Layout Overhaul (January 2026)
+### Hardening Pass (April 2026)
 
-- ✅ **Complete Mobile Rework** - Sidebar, header, footer, and cards fully responsive across all breakpoints
-- ✅ **Sidebar Toggle Overhaul** - Single `SidebarManager` module replaces 21 duplicate inline scripts
-- ✅ **Mobile Sidebar Overlay** - Off-screen slide-in with backdrop, escape key, and scroll lock
-- ✅ **Desktop Mini Sidebar** - Clean 70px collapsed state with icon-only navigation
-- ✅ **Hamburger in Header** - Toggle button lives in navbar flow, pinned at sidebar edge on desktop
-- ✅ **Fixed Mobile Dropdowns** - Notification and profile dropdowns overlay properly on all screen sizes
-- ✅ **Responsive Cards & Buttons** - Compact sizing on mobile with smooth breakpoint transitions
-- ✅ **All Dependencies Current** - Every package at latest stable version with 0 vulnerabilities
+- ✅ **Security** - XSS-safe DOM rendering replaces `innerHTML` interpolation in toast/activity feed; inline `onclick` removed from `elements-tables`; `Referrer-Policy` + `X-Content-Type-Options` meta tags added to every page; `localStorage` reads schema-validated; password fields tagged `autocomplete="new-password"`; `console.*` and `debugger` stripped from production bundles
+- ✅ **Accessibility** - Skip-to-main-content link on every page, keyboard focus rings restored (`:focus-visible`), `prefers-reduced-motion` media query, `aria-controls`/`aria-expanded` on the sidebar toggle, sortable table headers gain `role="button"` + `aria-sort` + keyboard handlers, single `<h1>` per page, normalized heading hierarchy
+- ✅ **Performance** - CSS down 20% (~100 KB raw) via Bootstrap-partial cleanup and Bootstrap-Icons subsetting (158 used icons vs. 1,800); `cssCodeSplit`, `cssMinify: lightningcss`, `target: 'es2020'` in Vite config
+- ✅ **Memory leaks fixed** - Dashboard, analytics, and messages components now track intervals/listeners and clean up on `pagehide`; ApexCharts instances `.destroy()`'d
+- ✅ **Single charting library** - `chart.js` removed; dashboard migrated to ApexCharts (saved ~63 KB gzip in `vendor-charts` chunk)
+- ✅ **Toolchain** - Vite 7 → 8 (rolldown), ESLint 9 → 10, Lucide 0.469 → 1.11, plus minor bumps across the board (0 vulnerabilities)
+- ✅ **DRY** - 11 duplicated `searchComponent` definitions extracted to a `createSearchComponent` factory; magic numbers hoisted to a `constants.js` module
+- ✅ **Repo hygiene** - `dist-modern/` no longer tracked in git; abandoned dev scripts removed
 
 ## 🌟 Key Improvements in v3.0
 

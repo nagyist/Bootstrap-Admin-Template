@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <title>Forms - Bootstrap 5 Elements</title>
     
     <!-- SEO Meta Tags -->
@@ -74,6 +76,7 @@
 </head>
 
 <body data-page="elements" class="elements-page">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <div class="admin-app">
         <div class="admin-wrapper" id="admin-wrapper">
             
@@ -83,7 +86,7 @@
                     <div class="container-fluid">
                         <a class="navbar-brand d-flex align-items-center" href="./index.html">
                             <img src="/assets/images/logo.svg" alt="Logo" height="32" class="d-inline-block align-text-top me-2">
-                            <h1 class="h4 mb-0 fw-bold text-primary">Metis</h1>
+                            <span class="h4 mb-0 fw-bold text-primary">Metis</span>
                         </a>
 
                         <!-- Sidebar Toggle -->
@@ -126,7 +129,7 @@
             </header>
 
             <!-- Sidebar -->
-            <aside class="admin-sidebar">
+            <aside class="admin-sidebar" id="admin-sidebar">
                 <div class="sidebar-content">
                     <nav class="sidebar-nav">
                         <ul class="nav flex-column">
@@ -288,7 +291,7 @@
             <!-- Sidebar Backdrop (mobile overlay) -->
         <div class="sidebar-backdrop" aria-hidden="true"></div>
             <!-- Main Content -->
-            <main class="admin-main">
+            <main id="main-content" class="admin-main">
                 <div class="container-fluid p-4">
                     
                     <!-- Breadcrumb -->
@@ -322,7 +325,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="card-title mb-0">Basic Form Controls</h5>
+                                    <h2 class="h5 card-title mb-0">Basic Form Controls</h2>
                                 </div>
                                 <div class="card-body">
                                     <div class="element-preview-container">
@@ -366,7 +369,7 @@
                         <div class="col-lg-6">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="card-title mb-0">Form Sizing</h5>
+                                    <h2 class="h5 card-title mb-0">Form Sizing</h2>
                                 </div>
                                 <div class="card-body">
                                     <div class="element-preview-container">
@@ -390,7 +393,7 @@
                         <div class="col-lg-6">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="card-title mb-0">Disabled Forms</h5>
+                                    <h2 class="h5 card-title mb-0">Disabled Forms</h2>
                                 </div>
                                 <div class="card-body">
                                     <div class="element-preview-container">
@@ -424,7 +427,7 @@
                         <div class="col-lg-6">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="card-title mb-0">Select</h5>
+                                    <h2 class="h5 card-title mb-0">Select</h2>
                                 </div>
                                 <div class="card-body">
                                     <div class="element-preview-container">
@@ -468,7 +471,7 @@
                         <div class="col-lg-6">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="card-title mb-0">Checks and Radios</h5>
+                                    <h2 class="h5 card-title mb-0">Checks and Radios</h2>
                                 </div>
                                 <div class="card-body">
                                     <div class="element-preview-container">
@@ -522,7 +525,7 @@
                         <div class="col-lg-6">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="card-title mb-0">Switches</h5>
+                                    <h2 class="h5 card-title mb-0">Switches</h2>
                                 </div>
                                 <div class="card-body">
                                     <div class="element-preview-container">
@@ -560,7 +563,7 @@
                         <div class="col-lg-6">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="card-title mb-0">Range</h5>
+                                    <h2 class="h5 card-title mb-0">Range</h2>
                                 </div>
                                 <div class="card-body">
                                     <div class="element-preview-container">
@@ -592,7 +595,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="card-title mb-0">Input Groups</h5>
+                                    <h2 class="h5 card-title mb-0">Input Groups</h2>
                                 </div>
                                 <div class="card-body">
                                     <div class="element-preview-container">
@@ -643,7 +646,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="card-title mb-0">Floating Labels</h5>
+                                    <h2 class="h5 card-title mb-0">Floating Labels</h2>
                                 </div>
                                 <div class="card-body">
                                     <div class="element-preview-container">
@@ -656,7 +659,7 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-floating">
-                                                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                                                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password" autocomplete="new-password">
                                                     <label for="floatingPassword">Password</label>
                                                 </div>
                                             </div>
@@ -707,7 +710,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="card-title mb-0">Form Validation</h5>
+                                    <h2 class="h5 card-title mb-0">Form Validation</h2>
                                 </div>
                                 <div class="card-body">
                                     <div class="element-preview-container">

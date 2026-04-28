@@ -4,7 +4,7 @@
 // Mobile (<992px): toggle overlay sidebar with backdrop
 // ==========================================================================
 
-const MOBILE_BREAKPOINT = 992;
+import { MOBILE_BREAKPOINT_PX, RESIZE_DEBOUNCE_MS } from '../utils/constants.js';
 
 export class SidebarManager {
   constructor() {
@@ -25,12 +25,25 @@ export class SidebarManager {
       this.wrapper.appendChild(this.backdrop);
     }
 
+    // Wire up ARIA on the toggle button
+    if (this.sidebar.id) {
+      this.toggleButton.setAttribute('aria-controls', this.sidebar.id);
+    }
+
     this.init();
     this.bindEvents();
+    this.syncAria();
+  }
+
+  syncAria() {
+    const expanded = this.isMobile
+      ? this.sidebar.classList.contains('show')
+      : !this.wrapper.classList.contains('sidebar-collapsed');
+    this.toggleButton.setAttribute('aria-expanded', String(expanded));
   }
 
   get isMobile() {
-    return window.innerWidth < MOBILE_BREAKPOINT;
+    return window.innerWidth < MOBILE_BREAKPOINT_PX;
   }
 
   init() {
@@ -62,7 +75,7 @@ export class SidebarManager {
     let resizeTimer;
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => this.handleResize(), 150);
+      resizeTimer = setTimeout(() => this.handleResize(), RESIZE_DEBOUNCE_MS);
     });
   }
 
@@ -88,12 +101,14 @@ export class SidebarManager {
     this.wrapper.classList.add('sidebar-collapsed');
     this.toggleButton.classList.add('is-active');
     localStorage.setItem('sidebar-collapsed', 'true');
+    this.syncAria();
   }
 
   expandDesktop() {
     this.wrapper.classList.remove('sidebar-collapsed');
     this.toggleButton.classList.remove('is-active');
     localStorage.setItem('sidebar-collapsed', 'false');
+    this.syncAria();
   }
 
   // --- Mobile behavior: overlay sidebar with backdrop ---
@@ -109,12 +124,14 @@ export class SidebarManager {
     this.sidebar.classList.add('show');
     this.backdrop.classList.add('show');
     document.body.style.overflow = 'hidden'; // prevent background scroll
+    this.syncAria();
   }
 
   closeMobile() {
     this.sidebar.classList.remove('show');
     this.backdrop.classList.remove('show');
     document.body.style.overflow = '';
+    this.syncAria();
   }
 
   // Clean up when crossing the mobile/desktop breakpoint
@@ -137,5 +154,6 @@ export class SidebarManager {
       this.backdrop.classList.remove('show');
       document.body.style.overflow = '';
     }
+    this.syncAria();
   }
 }

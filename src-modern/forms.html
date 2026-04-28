@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <title>Advanced Forms - Modern Bootstrap Admin</title>
     
     <!-- SEO Meta Tags -->
@@ -22,6 +24,7 @@
 </head>
 
 <body data-page="forms">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <!-- Admin App Container -->
     <div class="admin-app">
         <div class="admin-wrapper" id="admin-wrapper">
@@ -33,7 +36,7 @@
                         <!-- Logo/Brand -->
                         <a class="navbar-brand d-flex align-items-center" href="./index.html">
                             <img src="/assets/images/logo.svg" alt="Logo" height="32" class="d-inline-block align-text-top me-2">
-                            <h1 class="h4 mb-0 fw-bold text-primary">Metis</h1>
+                            <span class="h4 mb-0 fw-bold text-primary">Metis</span>
                         </a>
 
                         <!-- Sidebar Toggle -->
@@ -307,7 +310,7 @@
             <!-- Sidebar Backdrop (mobile overlay) -->
         <div class="sidebar-backdrop" aria-hidden="true"></div>
             <!-- Main Content -->
-            <main class="admin-main">
+            <main id="main-content" class="admin-main">
                 <div class="container-fluid p-4">
                     
                     <!-- Page Header -->
@@ -323,10 +326,10 @@
                         <div class="col-lg-8">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="card-title mb-0">
+                                    <h2 class="h5 card-title mb-0">
                                         <i class="bi bi-envelope me-2 text-primary"></i>
                                         Contact Form with Real-time Validation
-                                    </h5>
+                                    </h2>
                                 </div>
                                 <div class="card-body">
                                     <form x-data="contactForm()" @submit.prevent="submitForm()">
@@ -457,10 +460,10 @@
                         <div class="col-lg-8">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="card-title mb-0">
+                                    <h2 class="h5 card-title mb-0">
                                         <i class="bi bi-person-plus me-2 text-success"></i>
                                         User Registration with Password Strength
-                                    </h5>
+                                    </h2>
                                 </div>
                                 <div class="card-body">
                                     <form x-data="registrationForm()" @submit.prevent="submitForm()">
@@ -501,13 +504,14 @@
                                                 <label class="form-label">Password</label>
                                                 <div class="input-group">
                                                     <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                                                    <input 
-                                                        :type="showPassword ? 'text' : 'password'" 
-                                                        class="form-control" 
+                                                    <input
+                                                        :type="showPassword ? 'text' : 'password'"
+                                                        class="form-control"
                                                         x-model="form.password"
                                                         @input="validatePassword()"
                                                         :class="getFieldClass('password')"
                                                         placeholder="Enter password"
+                                                        autocomplete="new-password"
                                                         required
                                                     >
                                                     <button 
@@ -536,13 +540,14 @@
                                                 <label class="form-label">Confirm Password</label>
                                                 <div class="input-group">
                                                     <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-                                                    <input 
-                                                        type="password" 
-                                                        class="form-control" 
+                                                    <input
+                                                        type="password"
+                                                        class="form-control"
                                                         x-model="form.confirmPassword"
                                                         @input="validateField('confirmPassword')"
                                                         :class="getFieldClass('confirmPassword')"
                                                         placeholder="Confirm password"
+                                                        autocomplete="new-password"
                                                         required
                                                     >
                                                 </div>
@@ -593,10 +598,10 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="card-title mb-0">
+                                    <h2 class="h5 card-title mb-0">
                                         <i class="bi bi-cloud-upload me-2 text-info"></i>
                                         Advanced File Upload with Progress
-                                    </h5>
+                                    </h2>
                                 </div>
                                 <div class="card-body">
                                     <div x-data="fileUploadForm()">
@@ -668,10 +673,10 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="card-title mb-0">
+                                    <h2 class="h5 card-title mb-0">
                                         <i class="bi bi-list-check me-2 text-warning"></i>
                                         Enhanced Multi-step Form Wizard
-                                    </h5>
+                                    </h2>
                                 </div>
                                 <div class="card-body">
                                     <div x-data="enhancedFormWizard()">
@@ -891,13 +896,14 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label class="form-label">Password *</label>
-                                                            <input 
-                                                                type="password" 
-                                                                class="form-control" 
+                                                            <input
+                                                                type="password"
+                                                                class="form-control"
                                                                 x-model="formData.password"
                                                                 :class="getFieldClass('password')"
                                                                 @blur="validateField('password')"
                                                                 @input="updatePasswordStrength()"
+                                                                autocomplete="new-password"
                                                                 required
                                                             >
                                                             <div class="invalid-feedback" x-show="errors.password" x-text="errors.password"></div>
@@ -916,12 +922,13 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label class="form-label">Confirm Password *</label>
-                                                            <input 
-                                                                type="password" 
-                                                                class="form-control" 
+                                                            <input
+                                                                type="password"
+                                                                class="form-control"
                                                                 x-model="formData.confirmPassword"
                                                                 :class="getFieldClass('confirmPassword')"
                                                                 @blur="validateField('confirmPassword')"
+                                                                autocomplete="new-password"
                                                                 required
                                                             >
                                                             <div class="invalid-feedback" x-show="errors.confirmPassword" x-text="errors.confirmPassword"></div>

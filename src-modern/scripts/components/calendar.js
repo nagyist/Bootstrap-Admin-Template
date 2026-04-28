@@ -1,5 +1,6 @@
 import Alpine from 'alpinejs';
 import { Modal } from 'bootstrap';
+import { createSearchComponent } from '../utils/search-component.js';
 
 document.addEventListener('alpine:init', () => {
   Alpine.data('calendarComponent', () => ({
@@ -608,7 +609,7 @@ document.addEventListener('alpine:init', () => {
       const hours = Math.floor(duration / 60);
       const minutes = duration % 60;
       
-      if (duration == 480) return 'All day';
+      if (duration === 480) return 'All day';
       if (hours === 0) return `${minutes} minutes`;
       if (minutes === 0) return `${hours} hour${hours > 1 ? 's' : ''}`;
       return `${hours}h ${minutes}m`;
@@ -669,24 +670,16 @@ document.addEventListener('alpine:init', () => {
   }));
 
   // Search component for header
-  Alpine.data('searchComponent', () => ({
-    query: '',
-    results: [],
-    
-    search() {
-      // Simulate search results
-      if (this.query.length > 2) {
-        this.results = [
-          { title: 'Team Meeting', url: '/calendar.html', type: 'Event' },
-          { title: 'Calendar Settings', url: '/settings.html', type: 'Page' },
-          { title: 'Project Timeline', url: '/calendar.html', type: 'Event' }
-        ].filter(item => 
-          item.title.toLowerCase().includes(this.query.toLowerCase())
-        );
-      } else {
-        this.results = [];
-      }
-    }
+  Alpine.data('searchComponent', createSearchComponent({
+    minLength: 3,
+    getResults(query) {
+      const q = query.toLowerCase();
+      return [
+        { title: 'Team Meeting', url: '/calendar.html', type: 'Event' },
+        { title: 'Calendar Settings', url: '/settings.html', type: 'Page' },
+        { title: 'Project Timeline', url: '/calendar.html', type: 'Event' },
+      ].filter((item) => item.title.toLowerCase().includes(q));
+    },
   }));
 
   // Theme switch component
