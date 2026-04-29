@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.3] - 2026-04-29
+
+### Accessibility — Lighthouse contrast & semantics pass
+
+A targeted accessibility round addressing every issue surfaced by Lighthouse on the live demo: insufficient color contrast across brand/badge/button/toast usages, an icon-only button with no accessible name, and a heading-order violation on the dashboard's stats row.
+
+### ♿ Accessibility
+
+- **Accessible name on icon-only button** — the dashboard's "New Item" button collapsed to just an icon at viewports < `sm`, leaving screen readers with no label. Added `aria-label="New Item"` and `aria-hidden="true"` on the decorative `<i>` so the icon isn't double-announced.
+- **Heading order — `h1 → h3` jump fixed** — the stats-card labels on Dashboard / Users / Products / Orders were `<h3 class="h6">` (introduced in 3.4.0 to give them semantic weight), but the visual hierarchy goes `h1` (page title) → stat labels with no `h2` between, which Lighthouse flags as a heading-order skip. Demoted the labels to `<p class="h6 mb-0 text-muted">`. They're metadata captions for a value, not section headings — a paragraph is the right element.
+- **Defined explicit `--bs-*-text-emphasis` tokens** — the template's brand palette is Tailwind-flavored (Indigo / Emerald / Amber / Cyan / Red 500-shade), and Bootstrap 5.3's auto-computed `text-X-emphasis` values for those still don't reach 4.5:1 against white. Pinned each emphasis token to its 700-shade equivalent (`#4338ca`, `#047857`, `#b45309`, `#0e7490`, `#b91c1c`) in light mode, and to the 300-shade for dark mode.
+- **Brand "Metis" wordmark** — switched from `text-primary` to `text-primary-emphasis` across all 21 pages. Indigo 500 (`#6366f1`) on white is ~4.2:1 and fails AA for normal text; Indigo 700 clears 7:1.
+- **Stat-delta indicators** (`+12.5%`, `-2.1%`) — 13 occurrences of `<small class="text-success">` / `text-danger` switched to the `-emphasis` variants. The Tailwind 500-shade green/red on white were both below AA for small text.
+- **`.btn-outline-primary` resting text color** — used `$primary` directly (~4.2:1 on white). Switched the resting and disabled text colors to `var(--bs-primary-text-emphasis)`. Hover/active states stay bright primary because they put white text on the primary fill, which is contrast-safe.
+- **Badges with `bg-warning` / `bg-info`** — Bootstrap's `.badge` defaults to white text, which on amber/cyan fails contrast badly (1.7:1 and 2.7:1). Swapped to the `text-bg-warning` / `text-bg-info` utility, which pairs the background with black text per Bootstrap 5.3's contrast logic. Black on amber/cyan clears 10:1.
+- **Toast success/danger contrast** — `text-bg-success` and `text-bg-danger` use white text on the base brand colors, which fails AA at small sizes. Toasts now use the 700-shade backgrounds (`#047857` Emerald 700 / `#b91c1c` Red 700) via a scoped `.toast.text-bg-*` override, leaving every other usage of those utilities untouched. Warning and info toast variants already use black text and were fine.
+- **Footer "Colorlib" link** — sat inside a `<p class="text-muted">` and inherited the muted gray, with no underline, so the only signal it was a link was the cursor change. Added explicit `color: var(--bs-primary-text-emphasis)` and `text-decoration: underline` for footer anchors.
+
+---
+
 ## [3.4.2] - 2026-04-29
 
 ### Design polish & consistency pass

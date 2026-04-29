@@ -40,21 +40,23 @@
 }
 
 // Outline Primary Button
+// Resting text uses the darker -text-emphasis token so it meets WCAG AA on white
+// (the bright #6366f1 against white is only ~4.2:1 — fails AA for normal text).
 .btn-outline-primary {
-  color: #{$primary};
+  color: var(--bs-primary-text-emphasis);
   border-color: #{$primary};
-  
+
   &:hover {
     color: #ffffff !important;
     background-color: #{$primary};
     border-color: #{$primary};
   }
-  
+
   &:focus,
   &.focus {
     box-shadow: 0 0 0 0.2rem rgba($primary, 0.25);
   }
-  
+
   &:active,
   &.active,
   .show > &.dropdown-toggle {
@@ -62,10 +64,10 @@
     background-color: #{$primary};
     border-color: #{$primary};
   }
-  
+
   &:disabled,
   &.disabled {
-    color: #{$primary};
+    color: var(--bs-primary-text-emphasis);
     background-color: transparent;
   }
 }

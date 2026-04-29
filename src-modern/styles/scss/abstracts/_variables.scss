@@ -139,4 +139,23 @@ $dark-primary: $primary;
   --box-shadow: #{$box-shadow};
   --box-shadow-sm: #{$box-shadow-sm};
   --box-shadow-lg: #{$box-shadow-lg};
-} 
+
+  // Accessible text-emphasis tokens for the Tailwind-flavored brand palette.
+  // Bootstrap 5.3 auto-computes these, but the defaults are still too light against
+  // a white background for our Indigo/Emerald/Amber/Cyan/Red 500-shade base colors
+  // (none reach 4.5:1 AA for normal text). Pin to the 700-shade equivalents.
+  --bs-primary-text-emphasis: #4338ca;  // Indigo 700
+  --bs-success-text-emphasis: #047857;  // Emerald 700
+  --bs-danger-text-emphasis:  #b91c1c;  // Red 700
+  --bs-warning-text-emphasis: #b45309;  // Amber 700
+  --bs-info-text-emphasis:    #0e7490;  // Cyan 700
+}
+
+// Match in dark theme — emphasis colors should be lighter against dark bg
+[data-bs-theme="dark"] {
+  --bs-primary-text-emphasis: #a5b4fc;  // Indigo 300
+  --bs-success-text-emphasis: #6ee7b7;  // Emerald 300
+  --bs-danger-text-emphasis:  #fca5a5;  // Red 300
+  --bs-warning-text-emphasis: #fcd34d;  // Amber 300
+  --bs-info-text-emphasis:    #67e8f9;  // Cyan 300
+}

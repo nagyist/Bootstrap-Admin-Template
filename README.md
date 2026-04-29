@@ -2,7 +2,7 @@
 
 > A completely modernized, powerful, and free Bootstrap 5 admin dashboard template built with cutting-edge web technologies.
 
-**🎉 Version 3.4.2 Release** - Design polish: ghost icon header buttons, refined sidebar with left-accent active state, unified card design across all pages, and a stack of fixes to the Security page, missing notifications dropdown on 7 element sub-pages, and the Bootstrap collapse init flash on the Elements submenu.
+**🎉 Version 3.4.3 Release** - Lighthouse accessibility pass: AA-compliant color tokens (Indigo/Emerald/Amber/Cyan/Red 700-shade for emphasis), brand & badge & toast contrast fixes, heading-order correction on stats cards, and an accessible name on the icon-only "New Item" button.
 
 ![Metis Bootstrap Admin Dashboard](./metis-bootstrap-admin-dashboard.png)
 
