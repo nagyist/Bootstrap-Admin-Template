@@ -106,9 +106,9 @@ class AdminApp {
       new Modal(element);
     });
 
-    // Initialize collapse elements
+    // Initialize collapse elements (toggle:false — don't auto-open on construction)
     document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(element => {
-      new Collapse(element);
+      new Collapse(element, { toggle: false });
     });
 
     // Initialize tabs

@@ -5,6 +5,47 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.2] - 2026-04-29
+
+### Design polish & consistency pass
+
+A focused pass on header chrome, sidebar navigation, cards, and the Security page. Several long-standing visual inconsistencies and a Bootstrap collapse init bug were fixed along the way.
+
+### 🎨 Header & sidebar refresh
+
+- **Ghost icon buttons in the header** — theme, fullscreen, notifications, and user-menu buttons no longer use bordered `btn-outline-secondary`; they're now borderless square icon buttons with a subtle filled hover state. Override scoped to `.admin-header .navbar-nav .btn` so all 21 pages pick it up via the shared layout SCSS — no per-page markup edits needed.
+- **Softer "⌘K"-style search input** — tertiary-bg fill, no visible border at rest, soft `primary-border-subtle` focus ring. Less visual weight than the previous hard-bordered field.
+- **Thin divider before the user menu** — clean visual separation between system controls and the account menu.
+- **Trimmed `.navbar-brand`** — slightly smaller "Metis" wordmark with tighter letter-spacing.
+- **Sidebar: dropped the `translateX(4px)` hover lift** on top-level and submenu items — a 2018-feeling effect that didn't add usability.
+- **Active sidebar state redesigned** — was a heavy solid-primary fill across the whole row; now uses a subtle `primary-bg-subtle` background plus a 3px primary accent bar pinned to the sidebar's left edge via `::before`. The accent bar is scoped to top-level items only (submenus get a slightly stronger fill instead). Section header ("Admin" caps) restyled with smaller font and tighter letter-spacing.
+
+### 🃏 Cards — consistent design across the template
+
+- **Global `.card` style unified** with the previously-separate `.element-card` look from the elements overview page. Cards now have a 1px `--bs-border-color` border, `0.75rem` corners, and a subtle `--bs-box-shadow-sm` at rest. Hover lifts the card with a softer `0 6px 16px rgba(0,0,0,0.06)` shadow (border color stays neutral on hover for a subtler interaction).
+- **Removed leftover glassmorphism** — `backdrop-filter: blur(12px)` and the `inset 0 1px 0 rgba(...)` faux-highlight are gone. They served no purpose on opaque cards.
+- **Removed conflicting `.stats-card { border: none; ... }` override** in `_tables.scss` that was making the dashboard's top stats row look different from every other card on the site. Kept only the `.stats-icon` sizing block, which is the part actually specific to stats cards.
+- **`.card-header` / `.card-footer` get internal 1px borders** so divisions render crisply against the new bordered card.
+
+### 🐛 Bug fixes
+
+- **Elements submenu flash on every page load** — `main.js` was calling `new Collapse(element)` without config, so Bootstrap's default `toggle: true` immediately toggled each collapse target on construction. The Elements submenu was briefly auto-opening with a `.collapsing` height transition on every navigation. Fixed by passing `{ toggle: false }`, matching what Bootstrap's own data-API uses internally.
+- **Notifications dropdown missing on 7 element sub-pages** — `elements-alerts`, `elements-badges`, `elements-buttons`, `elements-cards`, `elements-forms`, `elements-modals`, and `elements-tables` had a stripped-down header that lacked the bell icon entirely (also missing the user-menu chevron, button tooltips, and the responsive `d-none d-md-inline-block` on fullscreen). All 7 were verified byte-identical and bulk-replaced with the canonical header from `index.html`. All 21 pages now share the exact same header markup.
+- **Security page styles were broken in multiple ways** —
+  - `.security-item` and `.security-info` had no styles at all → the Account / Two-Factor / Privacy sections rendered as a wall of plain text. Added the same flex-row pattern used by Settings (title + description on left, control on right, divider between rows).
+  - `.security-status` was styled as a full-width banner block but used as a small inline "Enabled / Disabled" label → rebuilt as a pill badge with `.enabled` (green) / `.disabled` (grey) variants.
+  - `.session-item` styles were nested under a non-existent `.session-management` wrapper and never applied → unscoped.
+  - `.activity-item` styles were nested under a non-existent `.activity-log` wrapper → unscoped.
+  - `.activity-icon` color variants used class names (`.login`, `.logout`, `.security`, `.error`) that the runtime binding never produced (binding was `activity.type` which yields `.login_success`, `.password_change`, etc.) → switched binding to `activity.severity` and aligned variants to `.success` / `.info` / `.warning` / `.danger`.
+  - Page-header buttons (`viewSecurityLog`, `emergencyLockdown`) were rendered *outside* the `x-data="securityComponent"` block → clicks silently failed. Moved `x-data` up to the `container-fluid` wrapper.
+  - Activity rows referenced `activity.title` / `activity.description`, but the Alpine data only has `message` / `details` → text wasn't rendering. Bindings corrected.
+
+### 🧹 Markup cleanup
+
+- **Removed redundant "Active" badge from sidebar Security row** across all 11 pages where it appeared (`<span class="badge bg-primary rounded-pill ms-auto">Active</span>`). The active state is now communicated through the new accent bar + filled background — the badge was decorative duplication.
+
+---
+
 ## [3.4.1] - 2026-04-28
 
 ### Fixed

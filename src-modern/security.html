@@ -293,7 +293,6 @@
                                 <a class="nav-link active" href="./security.html">
                                     <i class="bi bi-shield-check"></i>
                                     <span>Security</span>
-                                    <span class="badge bg-primary rounded-pill ms-auto">Active</span>
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -311,16 +310,16 @@
         <div class="sidebar-backdrop" aria-hidden="true"></div>
             <!-- Main Content -->
             <main id="main-content" class="admin-main">
-                <div class="container-fluid p-4 p-lg-4">
-                    
+                <div class="container-fluid p-4 p-lg-4" x-data="securityComponent" x-init="init()">
+
                     <!-- Page Header -->
-                    <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
                         <div>
                             <h1 class="h3 mb-0">Security & Authentication</h1>
                             <p class="text-muted mb-0">Manage your account security and access controls</p>
                         </div>
                         <div class="d-flex gap-2">
-                            <button type="button" class="btn btn-outline-danger" @click="viewSecurityLog()">
+                            <button type="button" class="btn btn-outline-secondary" @click="viewSecurityLog()">
                                 <i class="bi bi-shield-exclamation me-2"></i>Security Log
                             </button>
                             <button type="button" class="btn btn-danger" @click="emergencyLockdown()">
@@ -330,7 +329,7 @@
                     </div>
 
                     <!-- Security Container -->
-                    <div x-data="securityComponent" x-init="init()" class="security-layout">
+                    <div class="security-layout">
                         <div class="row g-6">
                             
                             <!-- Security Navigation Sidebar -->
@@ -512,12 +511,12 @@
                                     
                                     <template x-for="activity in securityActivity" :key="activity.id">
                                         <div class="activity-item">
-                                            <div :class="`activity-icon ${activity.type}`">
+                                            <div :class="`activity-icon ${activity.severity}`">
                                                 <i :class="activity.icon"></i>
                                             </div>
                                             <div class="flex-grow-1">
-                                                <h6 class="mb-1" x-text="activity.title"></h6>
-                                                <small class="text-muted" x-text="activity.description"></small>
+                                                <h6 class="mb-1" x-text="activity.message"></h6>
+                                                <small class="text-muted" x-text="activity.details"></small>
                                                 <div class="small text-muted mt-1">
                                                     <i class="bi bi-clock me-1"></i><span x-text="activity.timestamp"></span>
                                                 </div>
