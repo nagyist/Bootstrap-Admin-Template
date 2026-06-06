@@ -45,7 +45,7 @@ document.addEventListener('alpine:init', () => {
         {
           id: 1,
           name: 'John Smith',
-          avatar: '/assets/images/avatar-placeholder.svg',
+          avatar: './assets/images/avatar-placeholder.svg',
           type: 'Customer',
           online: true,
           lastMessage: 'Thank you for the quick response!',
@@ -148,7 +148,7 @@ document.addEventListener('alpine:init', () => {
         {
           id: 2,
           name: 'Sarah Johnson',
-          avatar: '/assets/images/avatar-placeholder.svg',
+          avatar: './assets/images/avatar-placeholder.svg',
           type: 'Team',
           online: true,
           lastMessage: 'The new dashboard looks great!',
@@ -179,7 +179,7 @@ document.addEventListener('alpine:init', () => {
         {
           id: 3,
           name: 'Mike Davis',
-          avatar: '/assets/images/avatar-placeholder.svg',
+          avatar: './assets/images/avatar-placeholder.svg',
           type: 'Vendor',
           online: false,
           lastMessage: 'I\'ll get back to you with the pricing.',
@@ -216,7 +216,7 @@ document.addEventListener('alpine:init', () => {
         {
           id: 4,
           name: 'Emily Brown',
-          avatar: '/assets/images/avatar-placeholder.svg',
+          avatar: './assets/images/avatar-placeholder.svg',
           type: 'Customer',
           online: false,
           lastMessage: 'Perfect, thanks!',
@@ -259,7 +259,7 @@ document.addEventListener('alpine:init', () => {
         {
           id: 5,
           name: 'David Wilson',
-          avatar: '/assets/images/avatar-placeholder.svg',
+          avatar: './assets/images/avatar-placeholder.svg',
           type: 'Support',
           online: true,
           lastMessage: 'The issue has been resolved.',

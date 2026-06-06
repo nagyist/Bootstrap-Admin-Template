@@ -48,7 +48,7 @@ document.addEventListener('alpine:init', () => {
           stock: 45,
           status: 'published',
           created: '2024-01-15',
-          image: '/assets/images/product-placeholder.svg',
+          image: './assets/images/product-placeholder.svg',
           description: 'Latest iPhone with advanced camera system'
         },
         {
@@ -60,7 +60,7 @@ document.addEventListener('alpine:init', () => {
           stock: 23,
           status: 'published',
           created: '2024-01-20',
-          image: '/assets/images/product-placeholder.svg',
+          image: './assets/images/product-placeholder.svg',
           description: 'Lightweight laptop with M2 chip'
         },
         {
@@ -72,7 +72,7 @@ document.addEventListener('alpine:init', () => {
           stock: 156,
           status: 'published',
           created: '2024-02-01',
-          image: '/assets/images/product-placeholder.svg',
+          image: './assets/images/product-placeholder.svg',
           description: '100% organic cotton t-shirt'
         },
         {
@@ -84,7 +84,7 @@ document.addEventListener('alpine:init', () => {
           stock: 8,
           status: 'published',
           created: '2024-02-10',
-          image: '/assets/images/product-placeholder.svg',
+          image: './assets/images/product-placeholder.svg',
           description: 'Complete JavaScript programming guide'
         },
         {
@@ -96,7 +96,7 @@ document.addEventListener('alpine:init', () => {
           stock: 0,
           status: 'published',
           created: '2024-02-15',
-          image: '/assets/images/product-placeholder.svg',
+          image: './assets/images/product-placeholder.svg',
           description: 'Professional garden tool kit'
         },
         {
@@ -108,7 +108,7 @@ document.addEventListener('alpine:init', () => {
           stock: 67,
           status: 'published',
           created: '2024-02-20',
-          image: '/assets/images/product-placeholder.svg',
+          image: './assets/images/product-placeholder.svg',
           description: 'Noise-cancelling wireless headphones'
         },
         {
@@ -120,7 +120,7 @@ document.addEventListener('alpine:init', () => {
           stock: 34,
           status: 'draft',
           created: '2024-02-25',
-          image: '/assets/images/product-placeholder.svg',
+          image: './assets/images/product-placeholder.svg',
           description: 'Classic fit denim jeans'
         },
         {
@@ -132,7 +132,7 @@ document.addEventListener('alpine:init', () => {
           stock: 15,
           status: 'published',
           created: '2024-03-01',
-          image: '/assets/images/product-placeholder.svg',
+          image: './assets/images/product-placeholder.svg',
           description: 'Advanced Python programming techniques'
         },
         {
@@ -144,7 +144,7 @@ document.addEventListener('alpine:init', () => {
           stock: 12,
           status: 'published',
           created: '2024-03-05',
-          image: '/assets/images/product-placeholder.svg',
+          image: './assets/images/product-placeholder.svg',
           description: 'Central hub for smart home devices'
         },
         {
@@ -156,7 +156,7 @@ document.addEventListener('alpine:init', () => {
           stock: 28,
           status: 'pending',
           created: '2024-03-10',
-          image: '/assets/images/product-placeholder.svg',
+          image: './assets/images/product-placeholder.svg',
           description: 'Professional chef knife collection'
         },
         {
@@ -168,7 +168,7 @@ document.addEventListener('alpine:init', () => {
           stock: 67,
           status: 'published',
           created: '2024-03-12',
-          image: '/assets/images/product-placeholder.svg',
+          image: './assets/images/product-placeholder.svg',
           description: 'Latest Samsung flagship smartphone'
         },
         {
@@ -180,7 +180,7 @@ document.addEventListener('alpine:init', () => {
           stock: 156,
           status: 'published',
           created: '2024-03-14',
-          image: '/assets/images/product-placeholder.svg',
+          image: './assets/images/product-placeholder.svg',
           description: 'Non-slip premium yoga mat'
         },
         {
@@ -192,7 +192,7 @@ document.addEventListener('alpine:init', () => {
           stock: 23,
           status: 'published',
           created: '2024-03-16',
-          image: '/assets/images/product-placeholder.svg',
+          image: './assets/images/product-placeholder.svg',
           description: 'Complete React development guide'
         },
         {
@@ -204,7 +204,7 @@ document.addEventListener('alpine:init', () => {
           stock: 12,
           status: 'published',
           created: '2024-03-18',
-          image: '/assets/images/product-placeholder.svg',
+          image: './assets/images/product-placeholder.svg',
           description: 'Waterproof winter jacket'
         },
         {
@@ -216,7 +216,7 @@ document.addEventListener('alpine:init', () => {
           stock: 89,
           status: 'published',
           created: '2024-03-20',
-          image: '/assets/images/product-placeholder.svg',
+          image: './assets/images/product-placeholder.svg',
           description: 'High-precision gaming mouse'
         },
         {
@@ -228,7 +228,7 @@ document.addEventListener('alpine:init', () => {
           stock: 34,
           status: 'published',
           created: '2024-03-22',
-          image: '/assets/images/product-placeholder.svg',
+          image: './assets/images/product-placeholder.svg',
           description: 'Programmable drip coffee maker'
         },
         {
@@ -240,7 +240,7 @@ document.addEventListener('alpine:init', () => {
           stock: 18,
           status: 'published',
           created: '2024-03-24',
-          image: '/assets/images/product-placeholder.svg',
+          image: './assets/images/product-placeholder.svg',
           description: 'Master Node.js development'
         },
         {
@@ -252,7 +252,7 @@ document.addEventListener('alpine:init', () => {
           stock: 0,
           status: 'published',
           created: '2024-03-26',
-          image: '/assets/images/product-placeholder.svg',
+          image: './assets/images/product-placeholder.svg',
           description: 'Lightweight running shoes'
         },
         {
@@ -264,7 +264,7 @@ document.addEventListener('alpine:init', () => {
           stock: 15,
           status: 'published',
           created: '2024-03-28',
-          image: '/assets/images/product-placeholder.svg',
+          image: './assets/images/product-placeholder.svg',
           description: 'Professional tablet with stylus'
         },
         {
@@ -276,7 +276,7 @@ document.addEventListener('alpine:init', () => {
           stock: 45,
           status: 'published',
           created: '2024-03-30',
-          image: '/assets/images/product-placeholder.svg',
+          image: './assets/images/product-placeholder.svg',
           description: 'Set of 3 ceramic planters'
         },
         {
@@ -288,7 +288,7 @@ document.addEventListener('alpine:init', () => {
           stock: 31,
           status: 'published',
           created: '2024-04-01',
-          image: '/assets/images/product-placeholder.svg',
+          image: './assets/images/product-placeholder.svg',
           description: 'Container technology mastery'
         },
         {
@@ -300,7 +300,7 @@ document.addEventListener('alpine:init', () => {
           stock: 78,
           status: 'published',
           created: '2024-04-03',
-          image: '/assets/images/product-placeholder.svg',
+          image: './assets/images/product-placeholder.svg',
           description: 'Premium cotton polo shirt'
         },
         {
@@ -312,7 +312,7 @@ document.addEventListener('alpine:init', () => {
           stock: 24,
           status: 'published',
           created: '2024-04-05',
-          image: '/assets/images/product-placeholder.svg',
+          image: './assets/images/product-placeholder.svg',
           description: 'Tenkeyless mechanical keyboard'
         },
         {
@@ -324,7 +324,7 @@ document.addEventListener('alpine:init', () => {
           stock: 62,
           status: 'published',
           created: '2024-04-07',
-          image: '/assets/images/product-placeholder.svg',
+          image: './assets/images/product-placeholder.svg',
           description: 'Bamboo desk organizer'
         },
         {
@@ -336,7 +336,7 @@ document.addEventListener('alpine:init', () => {
           stock: 14,
           status: 'published',
           created: '2024-04-09',
-          image: '/assets/images/product-placeholder.svg',
+          image: './assets/images/product-placeholder.svg',
           description: 'Introduction to AI and ML'
         }
       ];

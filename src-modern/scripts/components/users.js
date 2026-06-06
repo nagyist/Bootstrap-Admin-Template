@@ -66,7 +66,7 @@ document.addEventListener('alpine:init', () => {
             status: 'active',
             lastActive: '2 minutes ago',
             joinDate: '2023-01-15',
-            avatar: '/assets/images/avatar-placeholder.svg',
+            avatar: './assets/images/avatar-placeholder.svg',
             phone: '+1 (555) 123-4567',
             department: 'Engineering'
         },
@@ -78,7 +78,7 @@ document.addEventListener('alpine:init', () => {
             status: 'active',
             lastActive: '1 hour ago',
             joinDate: '2023-02-20',
-            avatar: '/assets/images/avatar-placeholder.svg',
+            avatar: './assets/images/avatar-placeholder.svg',
             phone: '+1 (555) 987-6543',
             department: 'Marketing'
         },
@@ -90,7 +90,7 @@ document.addEventListener('alpine:init', () => {
             status: 'pending',
             lastActive: '1 day ago',
             joinDate: '2023-03-10',
-            avatar: '/assets/images/avatar-placeholder.svg',
+            avatar: './assets/images/avatar-placeholder.svg',
             phone: '+1 (555) 456-7890',
             department: 'Support'
         },
@@ -102,7 +102,7 @@ document.addEventListener('alpine:init', () => {
             status: 'active',
             lastActive: '5 minutes ago',
             joinDate: '2023-04-05',
-            avatar: '/assets/images/avatar-placeholder.svg',
+            avatar: './assets/images/avatar-placeholder.svg',
             phone: '+1 (555) 321-0987',
             department: 'Sales'
         },
@@ -114,7 +114,7 @@ document.addEventListener('alpine:init', () => {
             status: 'inactive',
             lastActive: '1 week ago',
             joinDate: '2023-01-30',
-            avatar: '/assets/images/avatar-placeholder.svg',
+            avatar: './assets/images/avatar-placeholder.svg',
             phone: '+1 (555) 654-3210',
             department: 'HR'
         },
@@ -126,7 +126,7 @@ document.addEventListener('alpine:init', () => {
             status: 'active',
             lastActive: '30 minutes ago',
             joinDate: '2022-12-01',
-            avatar: '/assets/images/avatar-placeholder.svg',
+            avatar: './assets/images/avatar-placeholder.svg',
             phone: '+1 (555) 789-0123',
             department: 'Engineering'
         },
@@ -138,7 +138,7 @@ document.addEventListener('alpine:init', () => {
             status: 'active',
             lastActive: '3 hours ago',
             joinDate: '2023-05-15',
-            avatar: '/assets/images/avatar-placeholder.svg',
+            avatar: './assets/images/avatar-placeholder.svg',
             phone: '+1 (555) 147-2580',
             department: 'Design'
         },
@@ -150,7 +150,7 @@ document.addEventListener('alpine:init', () => {
             status: 'active',
             lastActive: '1 hour ago',
             joinDate: '2023-03-25',
-            avatar: '/assets/images/avatar-placeholder.svg',
+            avatar: './assets/images/avatar-placeholder.svg',
             phone: '+1 (555) 369-1470',
             department: 'Support'
         }
@@ -277,7 +277,7 @@ document.addEventListener('alpine:init', () => {
             phone: userData.phone,
             lastActive: 'Just now',
             joinDate: new Date().toISOString().split('T')[0],
-            avatar: '/assets/images/avatar-placeholder.svg',
+            avatar: './assets/images/avatar-placeholder.svg',
             department: 'New'
         };
         this.users.push(newUser);

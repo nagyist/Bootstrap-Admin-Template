@@ -45,7 +45,7 @@ document.addEventListener('alpine:init', () => {
           customer: {
             name: 'John Smith',
             email: 'john@example.com',
-            avatar: '/assets/images/avatar-placeholder.svg'
+            avatar: './assets/images/avatar-placeholder.svg'
           },
           items: [
             { name: 'iPhone 14 Pro', quantity: 1, price: 999.99 }
@@ -62,7 +62,7 @@ document.addEventListener('alpine:init', () => {
           customer: {
             name: 'Sarah Johnson',
             email: 'sarah@example.com',
-            avatar: '/assets/images/avatar-placeholder.svg'
+            avatar: './assets/images/avatar-placeholder.svg'
           },
           items: [
             { name: 'MacBook Air M2', quantity: 1, price: 1199.99 },
@@ -80,7 +80,7 @@ document.addEventListener('alpine:init', () => {
           customer: {
             name: 'Mike Davis',
             email: 'mike@example.com',
-            avatar: '/assets/images/avatar-placeholder.svg'
+            avatar: './assets/images/avatar-placeholder.svg'
           },
           items: [
             { name: 'Cotton T-Shirt', quantity: 3, price: 24.99 }
@@ -97,7 +97,7 @@ document.addEventListener('alpine:init', () => {
           customer: {
             name: 'Emily Brown',
             email: 'emily@example.com',
-            avatar: '/assets/images/avatar-placeholder.svg'
+            avatar: './assets/images/avatar-placeholder.svg'
           },
           items: [
             { name: 'JavaScript Guide', quantity: 1, price: 39.99 },
@@ -115,7 +115,7 @@ document.addEventListener('alpine:init', () => {
           customer: {
             name: 'David Wilson',
             email: 'david@example.com',
-            avatar: '/assets/images/avatar-placeholder.svg'
+            avatar: './assets/images/avatar-placeholder.svg'
           },
           items: [
             { name: 'Wireless Headphones', quantity: 1, price: 149.99 }
@@ -132,7 +132,7 @@ document.addEventListener('alpine:init', () => {
           customer: {
             name: 'Lisa Anderson',
             email: 'lisa@example.com',
-            avatar: '/assets/images/avatar-placeholder.svg'
+            avatar: './assets/images/avatar-placeholder.svg'
           },
           items: [
             { name: 'Smart Home Hub', quantity: 1, price: 199.99 },
@@ -150,7 +150,7 @@ document.addEventListener('alpine:init', () => {
           customer: {
             name: 'Robert Martinez',
             email: 'robert@example.com',
-            avatar: '/assets/images/avatar-placeholder.svg'
+            avatar: './assets/images/avatar-placeholder.svg'
           },
           items: [
             { name: 'Samsung Galaxy S24', quantity: 1, price: 899.99 }
@@ -167,7 +167,7 @@ document.addEventListener('alpine:init', () => {
           customer: {
             name: 'Jennifer Taylor',
             email: 'jennifer@example.com',
-            avatar: '/assets/images/avatar-placeholder.svg'
+            avatar: './assets/images/avatar-placeholder.svg'
           },
           items: [
             { name: 'Yoga Mat Premium', quantity: 2, price: 49.99 },
@@ -185,7 +185,7 @@ document.addEventListener('alpine:init', () => {
           customer: {
             name: 'Christopher Lee',
             email: 'chris@example.com',
-            avatar: '/assets/images/avatar-placeholder.svg'
+            avatar: './assets/images/avatar-placeholder.svg'
           },
           items: [
             { name: 'React Handbook', quantity: 1, price: 54.99 },
@@ -204,7 +204,7 @@ document.addEventListener('alpine:init', () => {
           customer: {
             name: 'Amanda Clark',
             email: 'amanda@example.com',
-            avatar: '/assets/images/avatar-placeholder.svg'
+            avatar: './assets/images/avatar-placeholder.svg'
           },
           items: [
             { name: 'Gaming Mouse RGB', quantity: 1, price: 79.99 },
@@ -222,7 +222,7 @@ document.addEventListener('alpine:init', () => {
           customer: {
             name: 'Daniel Rodriguez',
             email: 'daniel@example.com',
-            avatar: '/assets/images/avatar-placeholder.svg'
+            avatar: './assets/images/avatar-placeholder.svg'
           },
           items: [
             { name: 'Coffee Maker Deluxe', quantity: 1, price: 249.99 }
@@ -239,7 +239,7 @@ document.addEventListener('alpine:init', () => {
           customer: {
             name: 'Michelle White',
             email: 'michelle@example.com',
-            avatar: '/assets/images/avatar-placeholder.svg'
+            avatar: './assets/images/avatar-placeholder.svg'
           },
           items: [
             { name: 'Running Shoes', quantity: 1, price: 129.99 },
@@ -257,7 +257,7 @@ document.addEventListener('alpine:init', () => {
           customer: {
             name: 'Kevin Thompson',
             email: 'kevin@example.com',
-            avatar: '/assets/images/avatar-placeholder.svg'
+            avatar: './assets/images/avatar-placeholder.svg'
           },
           items: [
             { name: 'Tablet Pro 12.9"', quantity: 1, price: 1099.99 }
@@ -274,7 +274,7 @@ document.addEventListener('alpine:init', () => {
           customer: {
             name: 'Rachel Garcia',
             email: 'rachel@example.com',
-            avatar: '/assets/images/avatar-placeholder.svg'
+            avatar: './assets/images/avatar-placeholder.svg'
           },
           items: [
             { name: 'Garden Planter Set', quantity: 1, price: 89.99 },
@@ -292,7 +292,7 @@ document.addEventListener('alpine:init', () => {
           customer: {
             name: 'Steven Hall',
             email: 'steven@example.com',
-            avatar: '/assets/images/avatar-placeholder.svg'
+            avatar: './assets/images/avatar-placeholder.svg'
           },
           items: [
             { name: 'AI & Machine Learning', quantity: 1, price: 79.99 }
@@ -309,7 +309,7 @@ document.addEventListener('alpine:init', () => {
           customer: {
             name: 'Nicole Allen',
             email: 'nicole@example.com',
-            avatar: '/assets/images/avatar-placeholder.svg'
+            avatar: './assets/images/avatar-placeholder.svg'
           },
           items: [
             { name: 'Wireless Headphones', quantity: 2, price: 149.99 }
@@ -326,7 +326,7 @@ document.addEventListener('alpine:init', () => {
           customer: {
             name: 'Anthony Young',
             email: 'anthony@example.com',
-            avatar: '/assets/images/avatar-placeholder.svg'
+            avatar: './assets/images/avatar-placeholder.svg'
           },
           items: [
             { name: 'Cotton T-Shirt', quantity: 5, price: 24.99 }
@@ -343,7 +343,7 @@ document.addEventListener('alpine:init', () => {
           customer: {
             name: 'Patricia King',
             email: 'patricia@example.com',
-            avatar: '/assets/images/avatar-placeholder.svg'
+            avatar: './assets/images/avatar-placeholder.svg'
           },
           items: [
             { name: 'Kitchen Knife Set', quantity: 1, price: 129.99 },
@@ -361,7 +361,7 @@ document.addEventListener('alpine:init', () => {
           customer: {
             name: 'Joshua Wright',
             email: 'joshua@example.com',
-            avatar: '/assets/images/avatar-placeholder.svg'
+            avatar: './assets/images/avatar-placeholder.svg'
           },
           items: [
             { name: 'Smart Home Hub', quantity: 1, price: 199.99 },
@@ -379,7 +379,7 @@ document.addEventListener('alpine:init', () => {
           customer: {
             name: 'Laura Lopez',
             email: 'laura@example.com',
-            avatar: '/assets/images/avatar-placeholder.svg'
+            avatar: './assets/images/avatar-placeholder.svg'
           },
           items: [
             { name: 'MacBook Air M2', quantity: 1, price: 1199.99 }
